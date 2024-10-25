@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+<!-- home.html -->
+{% block title %}Pink_City Events{% endblock %}
+
+{% block content %}
+
+<body>
+    <h1>Create Notification</h1>
+    <form method="post" action="{% url 'create_notification' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Send Notification</button>
+    </form>
+
+<style>
+    form {
+        max-width: 500px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Style for form inputs */
+    form input[type="text"], 
+    form input[type="email"], 
+    form textarea, 
+    form select {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        font-family: 'Arial', sans-serif;
+        background-color: #fff;
+        box-sizing: border-box;
+    }
+    
+    /* Add hover effect for inputs */
+    form input[type="text"]:focus, 
+    form input[type="email"]:focus, 
+    form textarea:focus, 
+    form select:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+    
+    /* Style for the submit button */
+    form button[type="submit"] {
+        width: 100%;
+        padding: 12px 20px;
+        background-color:  #0d6efd;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    /* Button hover effect */
+    form button[type="submit"]:hover {
+        background-color: #0d6efd;
+    }
+    </style>
+</body> 
+{% endblock %}

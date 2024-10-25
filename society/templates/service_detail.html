@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Service Comment{% endblock %}
+
+{% block content %}
+
+<div class="service">
+    <h2>{{ service.service_type }}</h2>
+    <p>{{ service.description }}</p>
+    <p>Price: {{ service.price }}</p>
+</div>
+
+<!-- Comment Section -->
+<div class="comments-section">
+    <h3>Comments</h3>
+    <ul>
+        {% for comment in comments %}
+        <li>
+            <p>{{ comment.user }}: {{ comment.content }} ({{ comment.created_at }})</p>
+
+            <!-- Replies -->
+            <ul>
+                {% for reply in comment.replies.all %}
+                <li>{{ reply.user }}: {{ reply.content }} ({{ reply.created_at }})</li>
+                {% endfor %}
+            </ul>
+
+            <!-- Reply Form -->
+            <form method="POST">
+                {% csrf_token %}
+                {{ reply_form.as_p }}
+                <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                <button type="submit" name="reply_form" class="btn btn-primary">Reply</button>
+                <a href="{% url 'services' %}" class="btn btn-secondary">Cancel</a>
+
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Comment Form -->
+    <form method="POST">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit" name="comment_form" class="btn btn-primary">Post Comment</button>
+        <a href="{% url 'services' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{%endblock%}

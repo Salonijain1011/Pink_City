@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}User Dashboard{% endblock %}
+
+{% block content %}
+<h1>{{ user.username }}'s Dashboard</h1>
+
+<h2>Your Posts</h2>
+<ul>
+    {% for post in user_posts %}
+        <li>{{ post.title }} - {{ post.date }}</li>
+    {% empty %}
+        <li>You haven't created any posts yet.</li>
+    {% endfor %}
+</ul>
+
+<h2>Your Events</h2>
+<ul>
+    {% for event in user_events %}
+        <li>{{ event.title }} - {{ event.date }}</li>
+    {% empty %}
+        <li>You haven't created any events yet.</li>
+    {% endfor %}
+</ul>
+
+<h2>Your Services</h2>
+<ul>
+    {% for service in user_services %}
+        <li>{{ service.description }} - {{ service.date }}</li>
+    {% empty %}
+        <li>You haven't created any services yet.</li>
+    {% endfor %}
+</ul>
+
+<h2>Your Ads</h2>
+<ul>
+    {% for ad in user_ads %}
+        <li>{{ ad.title }} - {{ ad.date }}</li>
+    {% empty %}
+        <li>You haven't created any ads yet.</li>
+    {% endfor %}
+</ul>
+{% comment %} <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #FFFFFF;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 0 20px;
+    }
+
+    /* Header Styling */
+h1, h2 {
+    color: #333;
+    margin-top: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+/* Lists */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    color: #555;
+}
+
+ul li hr {
+    border: 1px solid #e0e0e0;
+}
+
+
+</style> {% endcomment %}
+{%endblock%}

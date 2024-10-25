@@ -1,0 +1,350 @@
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Pink_City Discussion Board{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #FFFFFF;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 0 20px;
+    }
+    
+    .header {
+        background-color: #ffffff;
+        color: black;
+        text-align: center;
+        padding: 15px 0;
+    }
+
+    .discussion-board {
+        background: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        padding: 20px;
+    }
+    
+    .discussion-board h2 {
+        color: #000000;
+        margin-bottom: 20px;
+    }
+    
+    .categories {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .category {
+        background-color: #0d6efd;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .category:hover {
+        background-color: #0b5ed7;
+    }
+
+    .post {
+        padding: 20px;
+        border-bottom: 1px solid #ddd;
+        transition: background-color 0.3s ease;
+    }
+
+    .post:last-child {
+        border-bottom: none;
+    }
+    .post:hover {
+        background-color: #f9f9f9;
+        transition: background-color 0.3s ease;
+    }
+        
+
+    .header h1, .post-title {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #000000;
+        margin: 0;
+    }
+    
+    .post-details,.post-content {
+        margin-top: 10px;
+        color: #333;
+        font-size: 0.9rem;
+    }
+
+    .post-category {
+        font-size: 0.85rem;
+        font-weight: bold;
+        color: #0d6efd;
+        margin-right: 10px;
+    }
+
+   
+
+    .post-form input,.post-form textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    
+    .post-form button {
+        background-color: #0d6efd;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    .post-form button:hover {
+        background-color: #0b5ed7;
+    }
+    
+
+    .post-form {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+    }
+
+    .post-form h3 {
+        margin-bottom: 20px;
+        color: #000000;
+    }
+
+
+    .forum {
+        padding: 20px;
+        border-bottom: 1px solid #ddd;
+        transition: background-color 0.3s ease;
+    }
+    .forum:hover {
+        background-color: #f9f9f9;
+    }
+
+    .forum-details {
+        margin-top: 5px;
+        color: #666;
+        font-size: 0.9rem;
+    }
+    
+    .forum-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #000000;
+    }
+    .forum-content {
+        margin-top: 10px;
+        color: #333;
+    }
+    .forum-category {
+        font-size: 0.85rem;
+        font-weight: bold;
+        color: #0d6efd;
+        margin-right: 10px;
+    }
+    
+    .forum-meta {
+        color: #666;
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+    
+    
+    .forum-description {
+        margin-top: 10px;
+        color: #333;
+    }
+   
+    
+    .category.active {
+        background-color: #0b5ed7;
+        font-weight: bold;
+    }
+
+    .cancel-btn, .search-btn,.new-post-button {
+        background-color: #0d6efd;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        display: inline-block;
+        margin: 10px 0;
+    }
+    
+    .cancel-btn:active, .search-btn:active,  .new-post-button:hover {
+        background-color: #0b5ed7;
+    }
+    .create-post-button {
+        background-color: #0d6efd;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: block;
+        margin: 20px 0;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .create-post-button:hover {
+        background-color: #0b5ed7;
+    }
+
+.all-btn{
+    background-color: #0d6efd;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        flex: 1;
+        min-width: 150px;
+    }
+
+   .all-btn:hover {
+        background-color: #0b5ed7;
+    }
+
+</style>
+
+<div class="container">
+    <div class="header">
+        <h1>Pink City Discussion Board</h1>
+    </div>
+    <form method="GET" action="{% url 'forum' %}">
+        <input type="text" name="search" placeholder="Search by post" value="{{ request.GET.search }}">
+        <input type="submit" class="search-btn" value="Search">
+        <a href="{% url 'forum' %}" class="cancel-btn">Cancel</a>
+
+    </form>
+
+    <div class="discussion-board">
+        <h2>Categories</h2>
+        <div class="categories">
+            <a href="{% url 'forum' %}" class ="all-btn">All</a>
+            <a href="{% url 'forum' %}?category=Lost%20%26%20Found" class="category {% if selected_category == 'Lost & Found' %}active{% endif %}">Lost & Found</a>
+            <a href="{% url 'forum' %}?category=Local%20News" class="category {% if selected_category == 'Local News' %}active{% endif %}">    Local News </a>
+            <a href="{% url 'forum' %}?category=Recommendations" class="category {% if selected_category == 'Recommendations' %}active{% endif %}">Recommendations </a>
+            <a href="{% url 'forum' %}?category=Community%20Events" class="category {% if selected_category == 'Community Events' %}active{% endif %}">Community Events</a>
+            <a href="{% url 'forum' %}?category=General%20Discussions" class="category {% if selected_category == 'General Discussions' %}active{% endif %}">General Discussions</a> 
+        </div>
+
+
+        <h2>Recent Posts</h2>
+        <div>
+            {% for forum_post in page_obj %}
+            <div class="forum">
+                <div class="forum-details">
+                    <h3>{{ forum_post.title }}</h3>
+                    <div class="forum-meta">
+                        <span class="forum-category">{{ forum_post.category }}</span> |
+                        <span>Posted by: {{forum_post.user.username}}</span> |
+                        <span>Date: {{ forum_post.date }}</span>
+                    </div>
+                    <p>{{ forum_post.description }}</p>
+        
+                    {% if request.user.is_superuser or forum_post.user == request.user %}
+                    <a href="{% url 'edit_post' forum_post.id %}">Edit</a> | 
+                      <a href="{% url 'delete_post' forum_post.id %}" onclick="return confirm('Are you sure you want to delete this Ad?');">Delete</a> |
+                    {% endif %}
+                    <a href="{% url 'forum_detail' forum_post.id %}">Comment</a> 
+
+                </div>
+            </div>
+            {% empty %}
+            <p>No posts available in this category.</p>
+            {% endfor %}
+        </div>
+     
+    <nav aria-label="forum page">
+        <ul class="pagination justify-content-center">  
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}" aria-label="Previous">
+                        &laquo;
+                    </a>
+                </li>
+            {% endif %}
+    
+            {% for page_num in paginator.page_range %}
+                <li class="page-item {% if page_num == page_obj.number %}active{% endif %}">
+                    <a class="page-link" href="?page={{ page_num }}{% if selected_category %}&category={{ selected_category }}{% endif %}">{{ page_num }}</a>
+                </li>
+            {% endfor %}
+    
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}" aria-label="Next">
+                        &raquo;
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    
+    <button class="create-post-button">Create New Post</button>
+
+    <div id="post-form" class="post-form" style="display: none;">
+        <h3>Create New Post</h3>
+        <form method="POST" action="{% url 'create_post' %}">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Post Title" required>
+            <select class="form-select" name="category" required>
+                <option selected>Category</option>
+                <option value="Lost & Found">Lost & Found</option>
+                <option value="Local News">Local News</option>
+                <option value="Recommendation">Recommendations</option>
+                <option value="Community Events">Community Events</option>
+                <option value="General Discussions">General Discussions</option>
+            </select>
+            <input type="date" id="id_date" name="date" min="2024-10-25" required>
+            <textarea name="description" rows="4" placeholder="Post Description" required></textarea>
+            <button type="submit">Create Post</button>
+        </form>
+    </div>
+    
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const createPostButton = document.querySelector('.create-post-button');
+        const postForm = document.querySelector('.post-form');
+
+        createPostButton.addEventListener('click', function() {
+            if (postForm.style.display === "none" || postForm.style.display === "") {
+                postForm.style.display = "block"; // Show the form
+                createPostButton.textContent = "Close Form"; // Change button text
+            } else {
+                postForm.style.display = "none"; // Hide the form
+                createPostButton.textContent = "Create New Post"; // Reset button text
+            }
+        });
+    });
+</script>
+
+{% endblock %}

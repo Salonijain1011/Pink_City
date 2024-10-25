@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Messages{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>Messages Received</h2>
+        
+        <ul>
+            {% for message in received_messages %}
+                <li>
+                    <strong>From:</strong> {{ message.sender.username }} <br>
+                    <strong>Ad:</strong> {{ message.ad.title }} <br>
+                    <strong>Message:</strong> {{ message.content }} <br>
+                    <strong>Sent:</strong> {{ message.timestamp }} <br>
+                    <hr>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% comment %} <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+/* Header Styling */
+h1, h2 {
+    color: #333;
+    margin-top: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+/* Lists */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    color: #555;
+}
+
+ul li hr {
+    border: 1px solid #e0e0e0;
+}
+
+
+/* For Messages Page */
+.messages-container ul {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.messages-container li {
+    margin: 10px 0;
+}
+
+/* Navbar Compatibility */
+nav a {
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #0b5ed7;
+}
+
+    </style> {% endcomment %}
+{% endblock %}

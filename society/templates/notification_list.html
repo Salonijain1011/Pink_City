@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Pink_City Notifications{% endblock %}
+
+{% block content %}
+
+<h1>Notifications</h1>
+<ul>
+    {% for notification in notifications %}
+        <li class="notification-item">
+            <strong>{{ notification.title }}</strong> - {{ notification.created_at }}<br>
+            {{ notification.message }}<br>
+            <!-- Delete button -->
+            <form method="post" action="{% url 'delete_notification' notification.id %}">
+                {% csrf_token %}
+                {% if request.user.is_superuser  %}
+                <button type="submit" class="delete-btn">Delete</button>
+                {%endif%}
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+
+ 
+    {% comment %} <style>
+        /* Basic reset for margins and paddings */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        /* Heading styling */
+        h1 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        /* Unordered list styling */
+        ul {
+            list-style-type: none; /* Remove default bullet points */
+            padding: 0;
+        }
+        
+        /* List item styling */
+        li {
+            background: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Strong text styling */
+        strong {
+            color: #333;
+        }
+        
+        /* Urgent notification styling */
+        span {
+            font-weight: bold;
+        }
+        
+        /* Urgent message color */
+        span[style*="color: red;"] {
+            color: red; /* Make urgent notifications stand out */
+        }
+
+        /* Delete button styling */
+        .delete-btn {
+            display: inline-block;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-top: 10px;
+        }
+        
+        .delete-btn:hover {
+            background-color: #ff3333;
+        }
+
+        .notification-item {
+            position: relative;
+        }
+    </style>  {% endcomment %}
+
+{% endblock %}

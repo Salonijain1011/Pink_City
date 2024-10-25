@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Service{% endblock %}
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    <label for="service_type">Service Type:</label>
+    <input type="text" id="service_type" name="service_type" value="{{ service.service_type }}" required><br>
+    
+    <label for="service_category">Category:</label>
+    <input type="text" id="service_category" name="service_category" value="{{ service.service_category }}" required><br>
+
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description" value="{{ service.description }}" required><br>
+
+    <label for="price">Price:</label>
+    <input type="text" id="price" name="price" value="{{ service.price }}" required><br>
+
+
+    <button type="submit">Save Changes</button>
+</form>
+<style>
+    /* General body styling */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        margin: 0;
+        padding: 0;
+        padding-top: 5px; /* Adjust based on navbar height */
+    }
+
+
+/* Form container styling */
+form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    margin: 50px auto 0; /* Center the form horizontally */
+}
+
+/* Form label styling */
+label {
+display: block;
+font-size: 14px;
+font-weight: bold;
+margin-bottom: 6px;
+color: #333;
+}
+
+/* Input and textarea styling */
+input[type="text"],
+input[type="date"],
+textarea {
+width: 100%;
+padding: 8px;
+margin-bottom: 15px;
+border: 1px solid #ccc;
+border-radius: 4px;
+font-size: 14px;
+background-color: #f9f9f9;
+}
+
+/* Textarea styling */
+textarea {
+height: 100px;
+resize: none;
+}
+
+/* Submit button styling */
+button {
+background-color:  #0d6efd;
+color: white;
+border: none;
+padding: 10px 20px;
+border-radius: 4px;
+font-size: 16px;
+cursor: pointer;
+transition: background-color 0.3s;
+}
+
+/* Submit button hover effect */
+button:hover {
+background-color: #0b5ed7;
+}
+
+</style>
+{%endblock%}

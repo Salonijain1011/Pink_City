@@ -15,14 +15,12 @@
         {% for comment in comments %}
         <li>
             <p>{{ comment.user }}: {{ comment.content }} ({{ comment.created_at }})</p>
-
             <!-- Replies -->
             <ul>
                 {% for reply in comment.replies.all %}
                 <li>{{ reply.user }}: {{ reply.content }} ({{ reply.created_at }})</li>
                 {% endfor %}
             </ul>
-
             <!-- Reply Form -->
             <form method="POST">
                 {% csrf_token %}
@@ -30,8 +28,6 @@
                 <input type="hidden" name="comment_id" value="{{ comment.id }}">
                 <button type="submit" name="reply_form" class="btn btn-primary">Reply</button>
                 <a href="{% url 'forum' %}" class="btn btn-secondary">Cancel</a>
-
-
             </form>
         </li>
         {% endfor %}

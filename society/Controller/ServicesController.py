@@ -35,7 +35,7 @@ def services(request):
         'page_number': page_number,
         'selected_category': selected_category,
         'search_query': search_query 
-    } # Get all events from the database # Set cache control headers
+    } 
     response = render(request, 'services.html', context)
     response['Cache-Control'] = 'no-store'
     response['Pragma'] = 'no-cache'
@@ -60,7 +60,6 @@ def edit_service(request, service_id):
         service.save()
         return redirect('services')  
 
-    # return render(request, 'edit_service.html', {'service': service})
     context = {'service': service}
     response = render(request, 'edit_service.html', context)
     response['Cache-Control'] = 'no-store'
@@ -83,7 +82,6 @@ def delete_service(request, service_id):
         service.delete()
         return redirect('services')  
 
-    # return render(request, 'delete_service.html', {'service': service})
     context = {'service': service}
     response = render(request, 'delete_service.html', context)
     response['Cache-Control'] = 'no-store'
@@ -105,6 +103,7 @@ def post_service(request):
     else:  
         return render(request,'services.html')
     
+@check_session   
 def service_detail(request, service_id):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -126,7 +125,7 @@ def service_detail(request, service_id):
             reply_form = ReplyForm(request.POST)
             if reply_form.is_valid():
                 reply = reply_form.save(commit=False)
-                reply.comment_id = request.POST.get('comment_id')  # ID of the comment being replied to
+                reply.comment_id = request.POST.get('comment_id')  
                 reply.user = request.user
                 reply.save()
                 return redirect('service_detail', service_id=service_id)
@@ -137,7 +136,6 @@ def service_detail(request, service_id):
         'comment_form': comment_form,
         'reply_form': reply_form,
     }
-    # return render(request, 'service_detail.html', context)
     response = render(request, 'service_detail.html', context)
     response['Cache-Control'] = 'no-store'
     response['Pragma'] = 'no-cache'

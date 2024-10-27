@@ -48,13 +48,15 @@ def forum(request):
     
     return response
 
+@check_session
 @login_required
 def edit_post(request, post_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
     post = get_object_or_404(Forum, id=post_id)
 
     if post.user != request.user and not request.user.is_superuser:
         return redirect('forum')  
-
     if request.method == 'POST':
         post.title = request.POST.get('title')
         post.category = request.POST.get('category')
@@ -64,11 +66,20 @@ def edit_post(request, post_id):
         post.save()
         return redirect('forum')  
 
-    return render(request, 'edit_post.html', {'post': post})
+    # return render(request, 'edit_post.html', {'post': post})
+    context = {'post': post}
+    response = render(request, 'edit_post.html', context)
+    response['Cache-Control'] = 'no-store'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    
+    return response
 
-
+@check_session
 @login_required
 def delete_post(request, post_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
     post = get_object_or_404(Forum, id=post_id)
 
     if post.user != request.user and not request.user.is_superuser:
@@ -78,8 +89,14 @@ def delete_post(request, post_id):
         post.delete()
         return redirect('forum')  
 
-    return render(request, 'delete_post.html', {'post': post})
-
+    # return render(request, 'delete_post.html', {'post': post})
+    context = {'post': post}
+    response = render(request, 'delete_post.html', context)
+    response['Cache-Control'] = 'no-store'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    
+    return response
 
 
 def create_post(request):
@@ -106,8 +123,10 @@ def create_post(request):
     else:
         return render(request, 'forum.html', {'today': timezone.now().date()})
     
-
+@check_session
 def forum_detail(request, post_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
     forum = get_object_or_404(Forum, id=post_id)
     comments = forum.comments.all()
     comment_form = ForumCommentForm()
@@ -137,8 +156,14 @@ def forum_detail(request, post_id):
         'comment_form': comment_form,
         'reply_form': reply_form,
     }
-    return render(request, 'forum_detail.html', context)
-
+    # return render(request, 'forum_detail.html', context)
+    # context = {'post': post}
+    response = render(request, 'forum_detail.html', context)
+    response['Cache-Control'] = 'no-store'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    
+    return response
 
 
 

@@ -43,13 +43,14 @@ def services(request):
     
     return response
 
+@check_session
 @login_required
 def edit_service(request, service_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
     service = get_object_or_404(Services, id=service_id)
-
     if  service.user != request.user and not request.user.is_superuser:
         return redirect('services')  
-
 
     if request.method == 'POST':
         service.service_type = request.POST.get('service_type')
@@ -59,10 +60,20 @@ def edit_service(request, service_id):
         service.save()
         return redirect('services')  
 
-    return render(request, 'edit_service.html', {'service': service})
+    # return render(request, 'edit_service.html', {'service': service})
+    context = {'service': service}
+    response = render(request, 'edit_service.html', context)
+    response['Cache-Control'] = 'no-store'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    
+    return response
 
+@check_session
 @login_required
 def delete_service(request, service_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
     service = get_object_or_404(Services, id=service_id)
 
     if service.user != request.user and not request.user.is_superuser:
@@ -72,8 +83,14 @@ def delete_service(request, service_id):
         service.delete()
         return redirect('services')  
 
-    return render(request, 'delete_service.html', {'service': service})
-
+    # return render(request, 'delete_service.html', {'service': service})
+    context = {'service': service}
+    response = render(request, 'delete_service.html', context)
+    response['Cache-Control'] = 'no-store'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    
+    return response
 
 def post_service(request):   
     if request.method=="POST":
@@ -89,6 +106,8 @@ def post_service(request):
         return render(request,'services.html')
     
 def service_detail(request, service_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
     service = get_object_or_404(Services, id=service_id)
     comments = service.comments.all()
     comment_form = CommentForm()
@@ -118,5 +137,10 @@ def service_detail(request, service_id):
         'comment_form': comment_form,
         'reply_form': reply_form,
     }
-    return render(request, 'service_detail.html', context)
-
+    # return render(request, 'service_detail.html', context)
+    response = render(request, 'service_detail.html', context)
+    response['Cache-Control'] = 'no-store'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    
+    return response

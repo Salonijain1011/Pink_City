@@ -42,8 +42,11 @@ def events(request):
     
     return response
 
+@check_session
 @login_required
 def edit_event(request, event_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
     event = get_object_or_404(Event, id=event_id)
 
     if event.user != request.user and not request.user.is_superuser:
@@ -56,11 +59,21 @@ def edit_event(request, event_id):
         event.description = request.POST.get('description')
         event.save()
         return redirect('events')  
+    context = {'event': event}
+    # return render(request, 'edit_event.html', {'event': event})
+    response = render(request, 'edit_event.html', context)
+    response['Cache-Control'] = 'no-store'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    
+    return response
 
-    return render(request, 'edit_event.html', {'event': event})
 
+@check_session
 @login_required
 def delete_event(request, event_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
     event = get_object_or_404(Event, id=event_id)
 
     if event.user != request.user and not request.user.is_superuser:
@@ -70,8 +83,13 @@ def delete_event(request, event_id):
         event.delete()
         return redirect('events')  
 
-    return render(request, 'delete_event.html', {'event': event})
-
+    context = {'event': event}
+    response = render(request, 'delete_event.html', context)
+    response['Cache-Control'] = 'no-store'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    
+    return response
 
 def create_event(request):
     if request.method == 'POST':
@@ -98,8 +116,10 @@ def create_event(request):
         return render(request, 'event.html', {'today': timezone.now().date()})
 
 
-
+@check_session
 def rsvp(request, event_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
     event = get_object_or_404(Event, id=event_id)
     rsvps = event.rsvps.filter(attending=True)  # Only those attending
 
@@ -115,4 +135,12 @@ def rsvp(request, event_id):
     else:
         form = RSVPForm()
 
-    return render(request, 'rsvp.html', {'event': event, 'form': form, 'rsvps': rsvps})
+    context = {'event': event, 'form': form, 'rsvps': rsvps}
+
+    # Set cache control headers
+    response = render(request, 'rsvp.html', context)
+    response['Cache-Control'] = 'no-store'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    
+    return response

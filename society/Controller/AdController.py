@@ -32,8 +32,11 @@ def classified(request):
     response['Expires'] = '0'    
     return response
 
+@check_session
 @login_required
 def edit_ad(request, ad_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
     ad = get_object_or_404(Ad, id=ad_id)
     if ad.user != request.user and not request.user.is_superuser:
         return redirect('classified')  
@@ -43,17 +46,34 @@ def edit_ad(request, ad_id):
         ad.description = request.POST.get('description')
         ad.save()
         return redirect('classified')  
-    return render(request, 'edit_ad.html', {'ad': ad})
+    # return render(request, 'edit_ad.html', {'ad': ad})
+    context = {'ad': ad}
+    response = render(request, 'edit_ad.html', context)
+    response['Cache-Control'] = 'no-store'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    
+    return response
 
+@check_session
 @login_required
 def delete_ad(request, ad_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
     ad = get_object_or_404(Ad, id=ad_id)
     if ad.user != request.user and not request.user.is_superuser:
         return redirect('classified')  
     if request.method == 'POST':
         ad.delete()
         return redirect('classified')  
-    return render(request, 'delete_ad.html', {'ad': ad})
+    # return render(request, 'delete_ad.html', {'ad': ad})
+    context = {'ad': ad}
+    response = render(request, 'delete_ad.html', context)
+    response['Cache-Control'] = 'no-store'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    
+    return response
 
 def create_ad(request):
     if request.method == 'POST':

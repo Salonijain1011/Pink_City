@@ -37,10 +37,11 @@ def home(request):
         'latest_notification': latest_notification,
     })
 
-
+@check_session
 @login_required
 def user_dashboard(request):
-   
+    if not request.user.is_authenticated:
+        return redirect('login')
     user_posts = Forum.objects.filter(user=request.user)
     user_events = Event.objects.filter(user=request.user)
     user_services = Services.objects.filter(user=request.user)
@@ -52,12 +53,17 @@ def user_dashboard(request):
         'user_services': user_services,
         'user_ads': user_ads,
     }
-    return render(request, 'user_dashboard.html', context)
-
+    # return render(request, 'user_dashboard.html', context)
+    response = render(request, 'user_dashboard.html', context)
+    response['Cache-Control'] = 'no-store'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'    
+    return response
 
 #chat
 
 
+@check_session
 @login_required
 def chatpage(request):
     response = render(request, 'chatpage.html')

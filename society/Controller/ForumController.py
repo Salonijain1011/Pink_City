@@ -40,7 +40,6 @@ def forum(request):
         'search_query': search_query 
     }
 
-    # Set cache control headers
     response = render(request, 'forum.html', context)
     response['Cache-Control'] = 'no-store'
     response['Pragma'] = 'no-cache'
@@ -60,13 +59,11 @@ def edit_post(request, post_id):
     if request.method == 'POST':
         post.title = request.POST.get('title')
         post.category = request.POST.get('category')
-        # post.name = request.POST.get('name')
         post.date = request.POST.get('date')
         post.description = request.POST.get('description')
         post.save()
         return redirect('forum')  
 
-    # return render(request, 'edit_post.html', {'post': post})
     context = {'post': post}
     response = render(request, 'edit_post.html', context)
     response['Cache-Control'] = 'no-store'
@@ -89,7 +86,6 @@ def delete_post(request, post_id):
         post.delete()
         return redirect('forum')  
 
-    # return render(request, 'delete_post.html', {'post': post})
     context = {'post': post}
     response = render(request, 'delete_post.html', context)
     response['Cache-Control'] = 'no-store'
@@ -106,7 +102,6 @@ def create_post(request):
         date = request.POST.get('date')
         description = request.POST.get('description')
 
-        # Ensure the date is not in the past
         if date and date < timezone.now().date().isoformat():
             messages.error(request, 'You cannot select a past date.')
             return redirect('forum')
@@ -145,7 +140,7 @@ def forum_detail(request, post_id):
             reply_form = ForumReplyForm(request.POST)
             if reply_form.is_valid():
                 reply = reply_form.save(commit=False)
-                reply.comment_id = request.POST.get('comment_id')  # Get the comment being replied to
+                reply.comment_id = request.POST.get('comment_id')  
                 reply.user = request.user
                 reply.save()
                 return redirect('forum_detail', post_id=post_id)
@@ -156,8 +151,6 @@ def forum_detail(request, post_id):
         'comment_form': comment_form,
         'reply_form': reply_form,
     }
-    # return render(request, 'forum_detail.html', context)
-    # context = {'post': post}
     response = render(request, 'forum_detail.html', context)
     response['Cache-Control'] = 'no-store'
     response['Pragma'] = 'no-cache'

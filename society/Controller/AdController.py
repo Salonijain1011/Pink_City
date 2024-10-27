@@ -32,6 +32,7 @@ def classified(request):
     response['Expires'] = '0'    
     return response
 
+
 @check_session
 @login_required
 def edit_ad(request, ad_id):
@@ -46,7 +47,6 @@ def edit_ad(request, ad_id):
         ad.description = request.POST.get('description')
         ad.save()
         return redirect('classified')  
-    # return render(request, 'edit_ad.html', {'ad': ad})
     context = {'ad': ad}
     response = render(request, 'edit_ad.html', context)
     response['Cache-Control'] = 'no-store'
@@ -54,6 +54,7 @@ def edit_ad(request, ad_id):
     response['Expires'] = '0'
     
     return response
+
 
 @check_session
 @login_required
@@ -66,7 +67,6 @@ def delete_ad(request, ad_id):
     if request.method == 'POST':
         ad.delete()
         return redirect('classified')  
-    # return render(request, 'delete_ad.html', {'ad': ad})
     context = {'ad': ad}
     response = render(request, 'delete_ad.html', context)
     response['Cache-Control'] = 'no-store'
@@ -74,6 +74,7 @@ def delete_ad(request, ad_id):
     response['Expires'] = '0'
     
     return response
+
 
 def create_ad(request):
     if request.method == 'POST':

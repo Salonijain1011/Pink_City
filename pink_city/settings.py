@@ -162,37 +162,20 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# STATICFILES_DIRS = [BASE_DIR / 'static']
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),
-    
-# ]
+
 import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Static files settings
 STATIC_URL = 'static/'
 
-# This is where staticfiles will collect files for deployment
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# This is where you put your static files in development
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels.layers.InMemoryChannelLayer"
-#     }
-# }
-# LOGIN_URL = '/login/'  # URL of the login page
-# LOGIN_REDIRECT_URL = '/'  # Redirect to home page after successful login
-# LOGOUT_REDIRECT_URL = '/login/'  # Redirect to login after logging out
 
 # Cookie settings
 SESSION_COOKIE_NAME = 'sessionid'  # Default session cookie name
@@ -204,11 +187,12 @@ CSRF_COOKIE_SECURE = False  # Set to True if using HTTPS
 CSRF_COOKIE_HTTPONLY = True  # Prevent JavaScript access to CSRF cookie
 
 
-
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = 'jainsaloni498@gmail.com'
-# EMAIL_HOST_PASSWORD = 'S@loni1011'
+# EMAIL_HOST_PASSWORD = ''  
+# DEFAULT_FROM_EMAIL = 'jainsaloni498@gmail.com'
+
 

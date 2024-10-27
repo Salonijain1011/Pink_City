@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Pink_City Classified Ads{% endblock %}
+{% block title %}Classified Ads{% endblock %}
 
 {% block content %}
     <style>
@@ -249,14 +249,12 @@
                     <input type="text" name="title" placeholder="Ad Title" required>
                     <input type="text" name="price" placeholder="Price (or Trade)" required>
                     <textarea name="description" rows="4" placeholder="Ad Description" required></textarea>
-                    {% comment %} <input type="text" name="contact_info" placeholder="Contact Information" required> {% endcomment %}
                     <button type="submit">Post Ad</button>
                 </form>
             </div>
 
         </div>
 
-        <!-- Script to Toggle Ad Form -->
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const createAdButton = document.querySelector('.create-ad-button');

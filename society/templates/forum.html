@@ -3,7 +3,7 @@
 
 {% load static %}
 
-{% block title %}Pink_City Discussion Board{% endblock %}
+{% block title %}Pink City Discussion Board{% endblock %}
 
 {% block content %}
 <style>
@@ -241,7 +241,6 @@
         <input type="text" name="search" placeholder="Search by post" value="{{ request.GET.search }}">
         <input type="submit" class="search-btn" value="Search">
         <a href="{% url 'forum' %}" class="cancel-btn">Cancel</a>
-
     </form>
 
     <div class="discussion-board">
@@ -254,7 +253,6 @@
             <a href="{% url 'forum' %}?category=Community%20Events" class="category {% if selected_category == 'Community Events' %}active{% endif %}">Community Events</a>
             <a href="{% url 'forum' %}?category=General%20Discussions" class="category {% if selected_category == 'General Discussions' %}active{% endif %}">General Discussions</a> 
         </div>
-
 
         <h2>Recent Posts</h2>
         <div>
@@ -329,7 +327,6 @@
         </form>
     </div>
     
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const createPostButton = document.querySelector('.create-post-button');

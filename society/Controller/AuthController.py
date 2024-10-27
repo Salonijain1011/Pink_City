@@ -38,16 +38,14 @@ def user_login(request):
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 
+
 @never_cache
 def user_logout(request):
-    # Log the user out
     logout(request)
 
-    # Clear session cookies (optional, since they will usually be cleared upon logout)
-    response = redirect('/login/')  # Redirect to the login page
+    response = redirect('/login/') 
 
-    # Clear cookies explicitly, if necessary
-    response.delete_cookie('sessionid')  # Adjust if your cookie name is different
-    response.delete_cookie('csrftoken')   # Clear CSRF cookie if needed
+    response.delete_cookie('sessionid')  
+    response.delete_cookie('csrftoken')  
 
     return response

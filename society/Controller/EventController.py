@@ -34,7 +34,7 @@ def events(request):
         'paginator': paginator,
         'page_number': page_number,
         'search_query': search_query 
-} # Get all events from the database # Set cache control headers
+} 
     response = render(request, 'events.html', context)
     response['Cache-Control'] = 'no-store'
     response['Pragma'] = 'no-cache'
@@ -60,7 +60,6 @@ def edit_event(request, event_id):
         event.save()
         return redirect('events')  
     context = {'event': event}
-    # return render(request, 'edit_event.html', {'event': event})
     response = render(request, 'edit_event.html', context)
     response['Cache-Control'] = 'no-store'
     response['Pragma'] = 'no-cache'
@@ -98,7 +97,6 @@ def create_event(request):
         location = request.POST.get('location')
         description = request.POST.get('description')
 
-        # Ensure the date is not in the past
         if date and date < timezone.now().date().isoformat():
             messages.error(request, 'You cannot select a past date.')
             return redirect('events')
@@ -121,7 +119,7 @@ def rsvp(request, event_id):
     if not request.user.is_authenticated:
         return redirect('login')
     event = get_object_or_404(Event, id=event_id)
-    rsvps = event.rsvps.filter(attending=True)  # Only those attending
+    rsvps = event.rsvps.filter(attending=True) 
 
     if request.method == 'POST':
         form = RSVPForm(request.POST)
@@ -137,7 +135,6 @@ def rsvp(request, event_id):
 
     context = {'event': event, 'form': form, 'rsvps': rsvps}
 
-    # Set cache control headers
     response = render(request, 'rsvp.html', context)
     response['Cache-Control'] = 'no-store'
     response['Pragma'] = 'no-cache'

@@ -4,10 +4,8 @@
 
 {% block content %}
 <body>
-    {% comment %} <div class="container"> {% endcomment %}
         <h2>Contact {{ ad.user.username }}</h2>
         <p>You are messaging the seller about: <strong>{{ ad.title }}</strong></p>
-
         {% if success_message %}
             <div class="alert alert-success">
                 {{ success_message }}
@@ -24,7 +22,6 @@
                 </div>
             </form>
         {% endif %}
-    {% comment %} </div> {% endcomment %}
 
     <style>  
     
@@ -109,10 +106,7 @@
             margin-bottom: 20px;
             text-align: center;
         }
-        
-    
-    
+          
     </style>
-
 </body>
 {% endblock %}

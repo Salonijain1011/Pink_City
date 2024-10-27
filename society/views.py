@@ -30,7 +30,6 @@ from society.Controller.Checker import check_session
 @never_cache
 @login_required(login_url='/login/')
 def home(request):
-    # Get the most recent notification
     latest_notification = Notification.objects.order_by('-created_at').first()
 
     return render(request, 'home.html', {
@@ -53,7 +52,6 @@ def user_dashboard(request):
         'user_services': user_services,
         'user_ads': user_ads,
     }
-    # return render(request, 'user_dashboard.html', context)
     response = render(request, 'user_dashboard.html', context)
     response['Cache-Control'] = 'no-store'
     response['Pragma'] = 'no-cache'
@@ -61,8 +59,6 @@ def user_dashboard(request):
     return response
 
 #chat
-
-
 @check_session
 @login_required
 def chatpage(request):

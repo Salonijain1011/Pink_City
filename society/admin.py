@@ -16,7 +16,7 @@ class EventAdmin(admin.ModelAdmin):
 admin.site.register(Event,EventAdmin)
 
 class ForumAdmin(admin.ModelAdmin):
-    list_display = ('title', 'user', 'date', 'description')  # Include the user field
+    list_display = ('title', 'user', 'date', 'description')  
     search_fields = ('title', 'user__username', 'description')
 admin.site.register(Forum,ForumAdmin)
 

@@ -1,8 +1,90 @@
-{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Service Comment{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Comments</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    {% csrf_token %}
+    <nav class="navbar navbar-expand-lg" style="background-color: #0d6efd;">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white">Pink City Hub</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-{% block content %}
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav ms-auto">
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'home' %}">Home</a>
+                  </li>
+                  
+                  <!-- Dropdown Menu -->
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Explore
+                      </a>
+                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <li><a class="dropdown-item" href="{% url 'forum' %}">Forum</a></li>
+                          <li><a class="dropdown-item" href="{% url 'services' %}">Services</a></li>
+                          <li><a class="dropdown-item" href="{% url 'events' %}">Events</a></li>
+                          <li><a class="dropdown-item" href="{% url 'classified' %}">Classified</a></li>
+                      </ul>
+                  </li>
+          
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'messages' %}">Messages</a>
+                  </li>
+                 
+                  {% if request.user.is_superuser %}
+
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Notifications
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{% url 'create_notification' %}">Send Notification</a></li>
+                        <li><a class="dropdown-item" href="{% url 'notification_list' %}">View Notification</a></li>
+                    </ul>
+                </li>
+                  {% else %}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'notification_list' %}">Notifications</a>
+                 </li>
+                 {% endif %}
+
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'user_dashboard' %}">Dashboard</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'chatpage' %}">Chat</a>
+                  </li>
+                  {% comment %} {% if request.user.is_superuser %}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'create_notification' %}">Send Notification</a>
+                  </li>
+                  {% endif %} {% endcomment %}
+
+                  {% if user.is_authenticated %}
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
+                  </li>
+                  <div id="snackbar">{{ latest_notification.message }}</div>
+                   
+                  {% else %}
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'login' %}">Login</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'register' %}">Register</a>
+                  </li>
+                  {% endif %}
+              </ul>
+          </div>
+        </nav>
 
 <div class="service">
     <h2>{{ service.service_type }}</h2>
@@ -16,34 +98,49 @@
     <ul>
         {% for comment in comments %}
         <li>
-            <p>{{ comment.user }}: {{ comment.content }} ({{ comment.created_at }})</p>
-
-            <!-- Replies -->
+            <div class="comment-content">
+                <div class="comment-header">
+                    <span class="comment-user">{{ comment.user }}</span>
+                    <span class="comment-date">{{ comment.created_at }}</span>
+                </div>
+                <p class="comment-text">{{ comment.content }}</p>
+            </div>
             <ul>
                 {% for reply in comment.replies.all %}
-                <li>{{ reply.user }}: {{ reply.content }} ({{ reply.created_at }})</li>
+                <li>
+                    <div class="comment-header">
+                        <span class="comment-user">{{ reply.user }}</span>
+                        <span class="comment-date">{{ reply.created_at }}</span>
+                    </div>
+                    <p class="comment-text">{{ reply.content }}</p>
+                </li>
                 {% endfor %}
             </ul>
 
             <!-- Reply Form -->
-            <form method="POST">
+            <form method="POST" class="reply-form">
                 {% csrf_token %}
                 {{ reply_form.as_p }}
                 <input type="hidden" name="comment_id" value="{{ comment.id }}">
-                <button type="submit" name="reply_form" class="btn btn-primary">Reply</button>
-                <a href="{% url 'services' %}" class="btn btn-secondary">Cancel</a>
-
+                <div class="button-group">
+                    <button type="submit" name="reply_form" class="btn btn-primary">Reply</button>
+                    <a href="{% url 'services' %}" class="btn btn-secondary">Cancel</a>
+                </div>
             </form>
         </li>
         {% endfor %}
     </ul>
 
     <!-- Comment Form -->
-    <form method="POST">
+    <form method="POST" class="comment-form">
         {% csrf_token %}
         {{ comment_form.as_p }}
-        <button type="submit" name="comment_form" class="btn btn-primary">Post Comment</button>
-        <a href="{% url 'services' %}" class="btn btn-secondary">Cancel</a>
+        <div class="button-group">
+            <button type="submit" name="comment_form" class="btn btn-primary">Post Comment</button>
+            <a href="{% url 'services' %}" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
 </div>
-{%endblock%}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,110 +1,185 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {
-  margin: 0 auto;
-  max-width: 800px;
-  padding: 0 20px;
-}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
 
-.container {
-  border: 2px solid #dedede;
-  background-color: #f1f1f1;
-  border-radius: 5px;
-  padding: 10px;
-  margin: 10px 0;
-}
+  <title>Chat</title>
+  <style>
+    /* Basic Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-.darker {
-  border-color: #ccc;
-  background-color: #ddd;
-}
+    /* Body Styling */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        color: #333;
+        padding-top: 60px; /* Add padding to prevent overlap with navbar */
+    }
 
-.container::after {
-  content: "";
-  clear: both;
-  display: table;
-}
+    /* Centered Content Wrapper */
+    .content-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 60px); /* Subtract navbar height */
+        padding: 20px;
+    }
 
-.container img {
-  float: left;
-  max-width: 60px;
-  width: 100%;
-  margin-right: 20px;
-  border-radius: 50%;
-}
+    /* Centered Container */
+    .container {
+        width: 100%;
+        max-width: 500px;
+        background-color: #f8f9fa;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
 
-.container img.right {
-  float: right;
-  margin-left: 20px;
-  margin-right:0;
-}
+    /* Heading Styling */
+    h2 {
+        color: #007bff;
+        margin-bottom: 20px;
+        font-size: 28px;
+        text-align: center;
+    }
 
-.time-right {
-  float: right;
-  color: #aaa;
-}
+    /* Form Styling */
+    #post-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
 
-.time-left {
-  float: left;
-  color: #999;
-}
-</style>
+    /* Label Styling */
+    #post-form label {
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+
+    /* Input Styling */
+    #post-form input[type="text"] {
+        width: 90%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 16px;
+        color: #333;
+    }
+
+    /* Submit Button Styling */
+    #post-form input[type="submit"] {
+        width: 90%;
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    #post-form input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+  </style>  
 </head>
 <body>
+  {% csrf_token %}
+  <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #0d6efd;">
+      <div class="container-fluid">
+          <a class="navbar-brand text-white">Pink City Hub</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
 
-<div align="center">
-    <h2>Pink City Chat</h2>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'home' %}">Home</a>
+                </li>
+                                 
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Explore
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{% url 'forum' %}">Forum</a></li>
+                        <li><a class="dropdown-item" href="{% url 'services' %}">Services</a></li>
+                        <li><a class="dropdown-item" href="{% url 'events' %}">Events</a></li>
+                        <li><a class="dropdown-item" href="{% url 'classified' %}">Classified</a></li>
+                    </ul>
+                </li>          
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'messages' %}">Messages</a>
+                </li>
+                {% if request.user.is_superuser %}
+
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Notifications
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" href="{% url 'create_notification' %}">Send Notification</a></li>
+                      <li><a class="dropdown-item" href="{% url 'notification_list' %}">View Notification</a></li>
+                  </ul>
+              </li>
+                {% else %}
+                <li class="nav-item">
+                  <a class="nav-link text-white" href="{% url 'notification_list' %}">Notifications</a>
+               </li>
+               {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'user_dashboard' %}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'chatpage' %}">Chat</a>
+                </li>
+        
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
+                </li>
+                <div id="snackbar">{{ latest_notification.message }}</div>
+        
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'register' %}">Register</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+      </nav>
+
+<div class="content-wrapper">
+    <div class="container">
+        <h2>Pink City Chat</h2>
+        <form id="post-form" method="POST" action="checkview">
+          {% csrf_token %}
+          <label for="room_name">Room Name</label>
+          <input type="text" name="room_name" id="room_name" required />
+          <input type="submit" value="Enter Room">
+        </form>
+    </div>
 </div>
 
-
-<div class="container">
-    <style>
-    input[type=text], select {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    }
-
-    input[type=submit] {
-    width: 100%;
-    background-color:#0d6efd;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    }
-
-    input[type=submit]:hover {
-    background-color: #0056b3;
-    }
-
-    div {
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    padding: 20px;
-    }
-    </style>
-
-    <form id="post-form" method="POST" action="checkview">
-      {% csrf_token %}
-      <label>Room Name</label>
-      <input type="text" name="room_name" id="room_name" required />
-      <input type="submit" value="Enter Room">
-  </form>
-  
-</div>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
-
-
 </html>

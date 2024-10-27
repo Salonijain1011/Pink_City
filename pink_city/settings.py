@@ -167,8 +167,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #     os.path.join(BASE_DIR, 'static'),
     
 # ]
+import os
+from pathlib import Path
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Static files settings
+STATIC_URL = 'static/'
+
+# This is where staticfiles will collect files for deployment
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# This is where you put your static files in development
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 

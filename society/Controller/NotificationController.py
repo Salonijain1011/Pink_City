@@ -1,10 +1,12 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+from pink_city import settings
 from society.models import Notification
 from society.forms import NotificationForm
 from django.core.mail import send_mail
 from society.Controller.Checker import check_session
+from society.models import User  
 
 
 @check_session
@@ -18,6 +20,21 @@ def create_notification(request):
             notification = form.save(commit=False)
             notification.user = request.user
             notification.save()
+
+            if notification.is_urgent:
+                users = User.objects.exclude(email__isnull=True).exclude(email='')  
+                subject = notification.title
+                message = notification.message
+
+                for user in users:
+                    send_mail(
+                        subject=subject,
+                        message=message,
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[user.email],
+                        fail_silently=False,
+                    )
+
             return redirect('home')
     else:
         form = NotificationForm()

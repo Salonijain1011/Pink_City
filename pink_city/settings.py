@@ -163,18 +163,13 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-import os
-from pathlib import Path
+# STATIC_URL = 'static/'
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATIC_URL = 'static/'
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 
 
 # Cookie settings
@@ -187,12 +182,12 @@ CSRF_COOKIE_SECURE = False  # Set to True if using HTTPS
 CSRF_COOKIE_HTTPONLY = True  # Prevent JavaScript access to CSRF cookie
 
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'jainsaloni498@gmail.com'
-# EMAIL_HOST_PASSWORD = ''  
-# DEFAULT_FROM_EMAIL = 'jainsaloni498@gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'jainsaloni498@gmail.com'
+EMAIL_HOST_PASSWORD = 'kaez ohka snfb bibe'  
+DEFAULT_FROM_EMAIL = 'jainsaloni498@gmail.com'
 
 

@@ -32,7 +32,6 @@ def classified(request):
     response['Expires'] = '0'    
     return response
 
-
 @check_session
 @login_required
 def edit_ad(request, ad_id):
@@ -71,8 +70,7 @@ def delete_ad(request, ad_id):
     response = render(request, 'delete_ad.html', context)
     response['Cache-Control'] = 'no-store'
     response['Pragma'] = 'no-cache'
-    response['Expires'] = '0'
-    
+    response['Expires'] = '0'   
     return response
 
 

@@ -7,15 +7,6 @@ from django.core.mail import send_mail
 from society.Controller.Checker import check_session
 
 
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse
-from society.models import Notification
-from society.forms import NotificationForm
-from django.core.mail import send_mail
-from society.Controller.Checker import check_session
-from django.conf import settings
-
 @check_session
 def create_notification(request):
     if not request.user.is_authenticated:
@@ -27,16 +18,6 @@ def create_notification(request):
             notification = form.save(commit=False)
             notification.user = request.user
             notification.save()
-
-            if notification.is_urgent:
-                send_mail(
-                    subject=notification.title,
-                    message=notification.message,
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[request.user.email],
-                    fail_silently=False,
-                )
-
             return redirect('home')
     else:
         form = NotificationForm()

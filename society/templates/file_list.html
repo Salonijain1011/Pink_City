@@ -1,0 +1,6 @@
+<h2>Files</h2>
+<ul>
+    {% for file in files %}
+        <li>{{ file.name }} - <a href="{{ file.download_url }}" target="_blank">Download</a></li>
+    {% endfor %}
+</ul>

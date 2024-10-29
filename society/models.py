@@ -115,7 +115,13 @@ class RoomMessage(models.Model):
     def _str_(self):
         return self.value
 
+class DriveFile(models.Model):
+    name = models.CharField(max_length=255)
+    file_id = models.CharField(max_length=255, unique=True)
+    download_url = models.URLField()
 
+    def __str__(self):
+        return self.name
 
    
 

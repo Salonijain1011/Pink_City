@@ -170,16 +170,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static'),
 # ]
+import os
+
+GOOGLE_DRIVE_CREDENTIALS = r"C:\Users\Sonali Jain Intern\Downloads\django-pink-city-cbf34294615f.json"
 
 
 # Cookie settings
 SESSION_COOKIE_NAME = 'sessionid'  # Default session cookie name
-SESSION_COOKIE_SECURE = False  # Set to True if using HTTPS
-SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access to session cookie
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Keep session active after closing browser
-SESSION_COOKIE_AGE = 1209600  # Session cookie age in seconds (default: 2 weeks)
-CSRF_COOKIE_SECURE = False  # Set to True if using HTTPS
-CSRF_COOKIE_HTTPONLY = True  # Prevent JavaScript access to CSRF cookie
+SESSION_COOKIE_SECURE = False 
+SESSION_COOKIE_HTTPONLY = True 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True 
+SESSION_COOKIE_AGE = 1209600  
+CSRF_COOKIE_SECURE = False  
+CSRF_COOKIE_HTTPONLY = True  
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

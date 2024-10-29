@@ -110,6 +110,22 @@
                     <a class="nav-link text-white" href="{% url 'notification_list' %}">Notifications</a>
                  </li>
                  {% endif %}
+                {% if request.user.is_superuser %}
+
+                 <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Files
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" href="{% url 'upload' %}">Upload Files</a></li>
+                      <li><a class="dropdown-item" href="{% url 'file_list' %}">Download Files</a></li>
+                  </ul>
+              </li>
+                {% else %}
+                <li class="nav-item">
+                  <a class="nav-link text-white" href="{% url 'file_list' %}">Files</a>
+               </li>
+               {% endif %}
 
                   <li class="nav-item">
                       <a class="nav-link text-white" href="{% url 'user_dashboard' %}">Dashboard</a>

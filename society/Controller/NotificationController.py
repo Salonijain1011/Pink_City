@@ -44,7 +44,6 @@ def create_notification(request):
     response['Cache-Control'] = 'no-store'
     response['Pragma'] = 'no-cache'
     response['Expires'] = '0'
-
     return response
 
 

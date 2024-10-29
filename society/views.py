@@ -1,10 +1,12 @@
 # from urllib import request
 from asyncio import Event
+import io
 import json
 from pyexpat.errors import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+from pink_city import settings
 from society.models import Services
 from .models import  Event, Room, RoomMessage
 from django.contrib import messages
@@ -12,19 +14,23 @@ from .models import Forum
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import user_passes_test
-from channels.layers import get_channel_layer
-from django.template import RequestContext
+# from django.template import RequestContext
 from .models import Notification
-from .forms import NotificationForm
+# from .forms import NotificationForm
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from .models import Ad, Message
+# from django.db.models import Q
+from .models import Ad
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.cache import never_cache
 from django.http import JsonResponse
 from society.Controller.Checker import check_session
+import os
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+from django.conf import settings
+from .models import DriveFile
 
 
 @never_cache
@@ -104,5 +110,47 @@ def getMessages(request, room):
     room_details = Room.objects.get(name=room)
     messages = RoomMessage.objects.filter(room=room_details)
     return JsonResponse({"messages": list(messages.values())})
+
+
+def get_drive_service():
+    credentials = service_account.Credentials.from_service_account_file(
+        settings.GOOGLE_DRIVE_CREDENTIALS,
+        scopes=["https://www.googleapis.com/auth/drive.metadata.readonly"]
+    )
+    return build('drive', 'v3', credentials=credentials)
+
+def upload(request):
+    if request.method == 'POST' and request.user.is_superuser:
+        drive_file_url = request.POST.get('file_url')  # Get the file URL from the form
+        if drive_file_url:
+            try:
+                # Extract the file ID from the URL
+                file_id = drive_file_url.split('/')[-2]  # Extract the file ID
+                service = get_drive_service()
+                # Retrieve file metadata from Google Drive
+                drive_file = service.files().get(fileId=file_id, fields='name').execute()
+                # Save file info in the database
+                DriveFile.objects.create(
+                    name=drive_file.get('name'),
+                    file_id=file_id,
+                    download_url=f"https://drive.google.com/uc?id={file_id}&export=download"
+                )
+
+                print(f"Successfully linked file: {drive_file.get('name')} with ID: {file_id}")
+                return redirect('file_list')  # Redirect to the list of files or a success page
+            
+            except Exception as e:
+                print(f"Error linking file: {str(e)}")  # Log the error
+                return render(request, 'link_drive_file.html', {'error': 'Failed to link the file. ' + str(e)})
+
+        else:
+            return render(request, 'link_drive_file.html', {'error': 'Please provide a valid file URL.'})
+
+    return render(request, 'link_drive_file.html')  # Render a form to link a Google Drive file
+
+
+def file_list(request):
+    files = DriveFile.objects.all()
+    return render(request, 'file_list.html', {'files': files})
 
 

@@ -1,10 +1,197 @@
-<form method="POST">
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+  <title>Upload</title>
+  <style>
+
+    /* Basic Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* Body Styling */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        color: #333;
+        padding-top: 220px; /* Add padding to prevent overlap with navbar */
+    }
+
+
+    /* Centered Container */
+    .container {
+        width: 100%;
+        max-width: 500px;
+        background-color: #f8f9fa;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    /* Heading Styling */
+    h2 {
+        color: #007bff;
+        margin-bottom: 20px;
+        font-size: 28px;
+        text-align: center;
+    }
+
+    /* Form Styling */
+    #post-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    /* Label Styling */
+    #post-form label {
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+
+    /* Input Styling */
+    #post-form input[type="text"] {
+        width: 90%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 16px;
+        color: #333;
+    }
+
+    /* Submit Button Styling */
+    #post-form input[type="submit"] {
+        width: 90%;
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    #post-form input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+  </style>  
+</head>
+<body>
+  {% csrf_token %}
+  <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #0d6efd;">
+      <div class="container-fluid">
+          <a class="navbar-brand text-white">Pink City Hub</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'home' %}">Home</a>
+                </li>
+                                 
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Explore
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{% url 'forum' %}">Forum</a></li>
+                        <li><a class="dropdown-item" href="{% url 'services' %}">Services</a></li>
+                        <li><a class="dropdown-item" href="{% url 'events' %}">Events</a></li>
+                        <li><a class="dropdown-item" href="{% url 'classified' %}">Classified</a></li>
+                    </ul>
+                </li>          
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'messages' %}">Messages</a>
+                </li>
+                {% if request.user.is_superuser %}
+
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Notifications
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" href="{% url 'create_notification' %}">Send Notification</a></li>
+                      <li><a class="dropdown-item" href="{% url 'notification_list' %}">View Notification</a></li>
+                  </ul>
+              </li>
+                {% else %}
+                <li class="nav-item">
+                  <a class="nav-link text-white" href="{% url 'notification_list' %}">Notifications</a>
+               </li>
+               {% endif %}
+
+               {% if request.user.is_superuser %}
+
+               <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Files
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{% url 'upload' %}">Upload Files</a></li>
+                    <li><a class="dropdown-item" href="{% url 'file_list' %}">Download Files</a></li>
+                </ul>
+            </li>
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'file_list' %}">Files</a>
+             </li>
+             {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'user_dashboard' %}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'chatpage' %}">Chat</a>
+                </li>
+        
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
+                </li>
+                <div id="snackbar">{{ latest_notification.message }}</div>
+        
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'register' %}">Register</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+      </nav>
+
+<div class="container">
+    <h2>Upload File</h2>
+
+ <form id="post-form" method="POST">
     {% csrf_token %}
     <label for="file_url">Google Drive File URL:</label>
-    <input type="text" name="file_url" id="file_url" required placeholder="Enter the Google Drive file link">
-    <button type="submit">Link File</button>
+    <input type="text" name="file_url" id="file_url" required placeholder="Enter the Google Drive file link" style="text-align:center;">
+    <input type="submit" value="Upload File">
 </form>
 
-{% if error %}
+ {% if error %}
     <p style="color: red;">{{ error }}</p>
-{% endif %}
+ {% endif %}
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

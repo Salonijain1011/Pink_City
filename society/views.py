@@ -31,7 +31,7 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from django.conf import settings
 from .models import DriveFile
-
+import threading
 
 @never_cache
 @login_required(login_url='/login/')
@@ -112,6 +112,7 @@ def getMessages(request, room):
     return JsonResponse({"messages": list(messages.values())})
 
 
+#files
 def get_drive_service():
     credentials = service_account.Credentials.from_service_account_file(
         settings.GOOGLE_DRIVE_CREDENTIALS,
@@ -119,38 +120,51 @@ def get_drive_service():
     )
     return build('drive', 'v3', credentials=credentials)
 
-def upload(request):
-    if request.method == 'POST' and request.user.is_superuser:
-        drive_file_url = request.POST.get('file_url')  # Get the file URL from the form
-        if drive_file_url:
-            try:
-                # Extract the file ID from the URL
-                file_id = drive_file_url.split('/')[-2]  # Extract the file ID
-                service = get_drive_service()
-                # Retrieve file metadata from Google Drive
-                drive_file = service.files().get(fileId=file_id, fields='name').execute()
-                # Save file info in the database
-                DriveFile.objects.create(
-                    name=drive_file.get('name'),
-                    file_id=file_id,
-                    download_url=f"https://drive.google.com/uc?id={file_id}&export=download"
-                )
+def link_file_to_drive(drive_file_url):
+    try:
+        file_id = drive_file_url.split('/')[-2] 
+        service = get_drive_service()
+        drive_file = service.files().get(fileId=file_id, fields='name').execute()
+        
+        DriveFile.objects.create(
+            name=drive_file.get('name'),
+            file_id=file_id,
+            download_url=f"https://drive.google.com/uc?id={file_id}&export=download"
+        )
+        print(f"Successfully linked file: {drive_file.get('name')} with ID: {file_id}")
+    except Exception as e:
+        print(f"Error linking file: {str(e)}")
 
-                print(f"Successfully linked file: {drive_file.get('name')} with ID: {file_id}")
-                return redirect('file_list')  # Redirect to the list of files or a success page
-            
-            except Exception as e:
-                print(f"Error linking file: {str(e)}")  # Log the error
-                return render(request, 'link_drive_file.html', {'error': 'Failed to link the file. ' + str(e)})
+@check_session
+@login_required
+def upload(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    if request.method == 'POST' and request.user.is_superuser:
+        drive_file_url = request.POST.get('file_url')
+        
+        if drive_file_url:
+            threading.Thread(target=link_file_to_drive, args=(drive_file_url,)).start()
+            return redirect('file_list')  
 
         else:
-            return render(request, 'link_drive_file.html', {'error': 'Please provide a valid file URL.'})
+            return render(request, 'link_drive_file.html', {'error': 'Please provide a valid file URL.'})   
+    return render(request, 'link_drive_file.html')
 
-    return render(request, 'link_drive_file.html')  # Render a form to link a Google Drive file
-
-
+@check_session
+@login_required
 def file_list(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     files = DriveFile.objects.all()
-    return render(request, 'file_list.html', {'files': files})
+    context={'files': files}
+    response = render(request, 'file_list.html', context)
+    response['Cache-Control'] = 'no-store'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'    
+    return response
+
+
+
 
 

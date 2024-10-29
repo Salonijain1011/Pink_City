@@ -1,4 +1,4 @@
-from .models import Event, Room, RoomMessage
+from .models import DriveFile, Event, Room, RoomMessage
 from django.contrib import admin
 from .models import Services
 from .models import Forum
@@ -28,6 +28,6 @@ admin.site.register(Ad,AdAdmin)
 
 admin.site.register(Room)
 admin.site.register(RoomMessage)
-
+admin.site.register(DriveFile)
 
 

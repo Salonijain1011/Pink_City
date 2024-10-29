@@ -1,6 +1,109 @@
-<h2>Files</h2>
-<ul>
-    {% for file in files %}
-        <li>{{ file.name }} - <a href="{{ file.download_url }}" target="_blank">Download</a></li>
-    {% endfor %}
-</ul>
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Download</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    {% csrf_token %}
+    <nav class="navbar navbar-expand-lg" style="background-color: #0d6efd;">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white">Pink City Hub</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav ms-auto">
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'home' %}">Home</a>
+                  </li>
+                  
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Explore
+                      </a>
+                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <li><a class="dropdown-item" href="{% url 'forum' %}">Forum</a></li>
+                          <li><a class="dropdown-item" href="{% url 'services' %}">Services</a></li>
+                          <li><a class="dropdown-item" href="{% url 'events' %}">Events</a></li>
+                          <li><a class="dropdown-item" href="{% url 'classified' %}">Classified</a></li>
+                      </ul>
+                  </li>
+          
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'messages' %}">Messages</a>
+                  </li>
+                 
+                  {% if request.user.is_superuser %}
+
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Notifications
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{% url 'create_notification' %}">Send Notification</a></li>
+                        <li><a class="dropdown-item" href="{% url 'notification_list' %}">View Notification</a></li>
+                    </ul>
+                </li>
+                  {% else %}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'notification_list' %}">Notifications</a>
+                 </li>
+                 {% endif %}
+
+                 {% if request.user.is_superuser %}
+
+                 <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Files
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" href="{% url 'upload' %}">Upload Files</a></li>
+                      <li><a class="dropdown-item" href="{% url 'file_list' %}">Download Files</a></li>
+                  </ul>
+              </li>
+                {% else %}
+                <li class="nav-item">
+                  <a class="nav-link text-white" href="{% url 'file_list' %}">Files</a>
+               </li>
+               {% endif %}
+
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'user_dashboard' %}">Dashboard</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'chatpage' %}">Chat</a>
+                  </li>
+                  {% if user.is_authenticated %}
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
+                  </li>
+                  <div id="snackbar">{{ latest_notification.message }}</div>
+                   
+                  {% else %}
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'login' %}">Login</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'register' %}">Register</a>
+                  </li>
+                  {% endif %}
+              </ul>
+          </div>
+        </nav>
+
+<div class="container download-page">
+    <h2>Files</h2>
+    <ul>
+        {% for file in files %}
+            <li>{{ file.name }} - <a href="{{ file.download_url }}" target="_blank">Download</a></li>
+        {% endfor %}
+    </ul>
+</div>        
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

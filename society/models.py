@@ -5,7 +5,6 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 
-# Create your models here.
 class Services(models.Model):
     id=models.AutoField(primary_key = True)
     service_type=models.CharField(max_length=100)

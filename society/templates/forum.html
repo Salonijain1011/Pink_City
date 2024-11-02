@@ -321,7 +321,7 @@
                 <option value="Community Events">Community Events</option>
                 <option value="General Discussions">General Discussions</option>
             </select>
-            <input type="date" id="id_date" name="date" min="2024-10-25" required>
+            <input type="date" id="id_date" name="date" min="2024-10-30" required>
             <textarea name="description" rows="4" placeholder="Post Description" required></textarea>
             <button type="submit">Create Post</button>
         </form>
@@ -334,11 +334,11 @@
 
         createPostButton.addEventListener('click', function() {
             if (postForm.style.display === "none" || postForm.style.display === "") {
-                postForm.style.display = "block"; // Show the form
-                createPostButton.textContent = "Close Form"; // Change button text
+                postForm.style.display = "block"; 
+                createPostButton.textContent = "Close Form"; 
             } else {
-                postForm.style.display = "none"; // Hide the form
-                createPostButton.textContent = "Create New Post"; // Reset button text
+                postForm.style.display = "none"; 
+                createPostButton.textContent = "Create New Post"; 
             }
         });
     });

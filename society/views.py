@@ -1,28 +1,22 @@
-# from urllib import request
 from asyncio import Event
 import io
 import json
 from pyexpat.errors import messages
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from pink_city import settings
 from society.models import Services
 from .models import  Event, Room, RoomMessage
 from django.contrib import messages
 from .models import Forum 
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import user_passes_test
-# from django.template import RequestContext
 from .models import Notification
-# from .forms import NotificationForm
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-# from django.db.models import Q
 from .models import Ad
-from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.cache import never_cache
 from django.http import JsonResponse
 from society.Controller.Checker import check_session

@@ -241,7 +241,6 @@
                 </nav>
                 <button class="create-ad-button">Create New Ad</button>
 
-            <!-- Ad Creation Form -->
             <div class="ad-form"  style="display: none;">
                 <h3>Post New Ad</h3>
                 <form method="POST" action="{% url 'create_ad' %}"  >
@@ -262,11 +261,11 @@
         
                 createAdButton.addEventListener('click', function() {
                     if (adForm.style.display === "none" || adForm.style.display === "") {
-                        adForm.style.display = "block"; // Show the form
-                        createAdButton.textContent = "Close Form"; // Change button text
+                        adForm.style.display = "block"; 
+                        createAdButton.textContent = "Close Form"; 
                     } else {
-                        adForm.style.display = "none"; // Hide the form
-                        createAdButton.textContent = "Create New Ad"; // Reset button text
+                        adForm.style.display = "none";
+                        createAdButton.textContent = "Create New Ad"; 
                     }
                 });
             });

@@ -298,7 +298,6 @@
     <div class="container">
         <header>
             <h1>Pink City Services</h1>
-            {% comment %} <p>Offer or request services from your neighbors.</p> {% endcomment %}
         </header>
         <form method="GET" action="{% url 'services' %}">
             <input type="text" name="search" placeholder="Search by services" value="{{ request.GET.search }}">
@@ -375,7 +374,6 @@
         
         <button class="create-service-button">Create New Service</button>
 
-        <!-- Service Form -->
         <div id="service-form"  style="display: none;">
             <h3>Offer or Request a Service</h3>
             <form method="POST" action="{% url 'post_service' %}">
@@ -417,15 +415,15 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const createServiceButton = document.querySelector('.create-service-button');
-                const serviceForm = document.getElementById('service-form'); // Using id selector
+                const serviceForm = document.getElementById('service-form'); 
         
                 createServiceButton.addEventListener('click', function() {
                     if (serviceForm.style.display === "none" || serviceForm.style.display === "") {
-                        serviceForm.style.display = "block"; // Show the form
-                        createServiceButton.textContent = "Close Form"; // Change button text
+                        serviceForm.style.display = "block"; 
+                        createServiceButton.textContent = "Close Form"; 
                     } else {
-                        serviceForm.style.display = "none"; // Hide the form
-                        createServiceButton.textContent = "Create New Service"; // Reset button text
+                        serviceForm.style.display = "none"; 
+                        createServiceButton.textContent = "Create New Service"; 
                     }
                 });
             });

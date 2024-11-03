@@ -102,10 +102,6 @@ def create_post(request):
         date = request.POST.get('date')
         description = request.POST.get('description')
 
-        if date and date < timezone.now().date().isoformat():
-            messages.error(request, 'You cannot select a past date.')
-            return redirect('forum')
-
         new_post = Forum.objects.create(
             title=title,
             category=category,         
@@ -116,7 +112,7 @@ def create_post(request):
         messages.success(request, 'Post created successfully!')
         return redirect('forum')
     else:
-        return render(request, 'forum.html', {'today': timezone.now().date()})
+        return render(request, 'forum.html',)
     
 @check_session
 def forum_detail(request, post_id):

@@ -31,38 +31,166 @@ nav.navbar .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
 }
 
-/* Message Styles */
+/* Container styling */
 .messages-container.container {
     background-color: #f8f9fa;
     padding: 20px;
-    max-width: 800px;
+    max-width: 900px;
     margin-top: 20px;
     border-radius: 8px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
 }
 
-.messages-container h2 {
+/* Sidebar (Ads list) styling */
+.ad-list {
+    width: 30%;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 15px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.ad-list h4 {
     color: #0d6efd;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    text-align: center;
 }
 
-.messages-container ul {
+.ad-list ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
-.messages-container li {
+.ad-list li {
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6;
+    text-align: center;
+}
+
+.ad-list li a {
+    color: #495057;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+.ad-list li a:hover {
+    color: #0d6efd;
+    font-weight: bold;
+}
+/* Container styling */
+.messages-container.container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    max-width: 900px;
+    margin-top: 20px;
+    border-radius: 8px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+/* Sidebar (Ads list) styling */
+.ad-list {
+    width: 30%;
     background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 15px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.ad-list h4 {
+    color: #0d6efd;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.ad-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ad-list li {
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6;
+    text-align: center;
+}
+
+.ad-list li a {
+    color: #495057;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+.ad-list li a:hover {
+    color: #0d6efd;
+    font-weight: bold;
+}
+
+/* Messages display styling */
+.message-display {
+    width: 70%;
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.message-display h4 {
+    color: #0d6efd;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.message-display ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.message-display li {
+    background-color: #f9f9f9;
     padding: 15px;
     border: 1px solid #dee2e6;
     border-radius: 5px;
     margin-bottom: 10px;
 }
 
-.messages-container li strong {
+.message-display li strong {
     color: #495057;
-    margin-right: 5px;
+    display: block;
+    font-size: 1em;
 }
+
+.message-display li small {
+    color: #6c757d;
+    display: block;
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .messages-container.container {
+        flex-direction: column;
+    }
+    
+    .ad-list, .message-display {
+        width: 100%;
+    }
+}
+
 
 /* Notification Specific Styles */
 .notifications-container {

@@ -3,6 +3,8 @@
 <html>
 <head>
     <title>Messages</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}" >
@@ -98,19 +100,41 @@
           </div>
         </nav>
     
-    <div class="messages-container container">
-        <h2>Messages Received</h2>
-        <ul>
-            {% for message in received_messages %}
-                <li>
-                    <strong>From:</strong> {{ message.sender.username }} <br>
-                    <strong>Ad:</strong> {{ message.ad.title }} <br>
-                    <strong>Message:</strong> {{ message.content }} <br>
-                    <strong>Sent:</strong> {{ message.timestamp }}
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+        <div class="messages-container container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4>Ads</h4>
+                    <ul class="list-group">
+                        {% for ad in ads_with_messages %}
+                            <li class="list-group-item">
+                                <a href="?ad_id={{ ad.id }}">{{ ad.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div class="col-md-8">
+                    {% if selected_ad %}
+                        <h4>Messages for "{{ selected_ad.title }}"</h4>
+                        <ul class="list-group">
+                            {% for message in ad_messages %}
+                                <li class="list-group-item">
+                                    <strong>From:</strong> {{ message.sender.username }}<br>
+                                    <strong>Message:</strong> {{ message.content }}<br>
+                                    <small>{{ message.timestamp }}</small>
+                                </li>
+                            {% empty %}
+                                <li class="list-group-item">No messages for this ad.</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>Please select an ad to view its messages.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -321,7 +321,7 @@
                 <option value="Community Events">Community Events</option>
                 <option value="General Discussions">General Discussions</option>
             </select>
-            <input type="date" id="id_date" name="date" min="2024-10-30" required>
+            <input type="date" id="id_date" name="date" required>
             <textarea name="description" rows="4" placeholder="Post Description" required></textarea>
             <button type="submit">Create Post</button>
         </form>
@@ -342,6 +342,10 @@
             }
         });
     });
+
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById("id_date").setAttribute("min", today);
+    
 </script>
 
 {% endblock %}

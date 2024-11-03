@@ -42,16 +42,27 @@ def message_seller(request, ad_id):
     return response
 
 
-
-
 @check_session
 @login_required
 def messages(request):
     if not request.user.is_authenticated:
         return redirect('login')
-    received_messages = Message.objects.filter(receiver=request.user).order_by('-timestamp')
+    
+    ads_with_messages = Ad.objects.filter(message__receiver=request.user).distinct()
 
-    context = {'received_messages': received_messages}
+    selected_ad_id = request.GET.get('ad_id')
+    selected_ad = None
+    ad_messages = []
+
+    if selected_ad_id:
+        selected_ad = get_object_or_404(Ad, id=selected_ad_id)
+        ad_messages = Message.objects.filter(ad=selected_ad, receiver=request.user).order_by('-timestamp')
+
+    context = {
+        'ads_with_messages': ads_with_messages,
+        'selected_ad': selected_ad,
+        'ad_messages': ad_messages,
+    }
 
     response = render(request, 'messages.html', context)
     response['Cache-Control'] = 'no-store'
@@ -59,4 +70,6 @@ def messages(request):
     response['Expires'] = '0'
 
     return response
+
+
 

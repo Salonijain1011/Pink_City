@@ -12,27 +12,31 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+load_dotenv()  
+
+MAPBOX_ACCESS_TOKEN = os.getenv('MAPBOX_ACCESS_TOKEN')
+
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL') 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-%me0ak3f7w*#ce5tpz@t_@wl@2v857+6x46d-%e#v-4z!jekom'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
 
-# Application definition
-
 INSTALLED_APPS = [
-    # 'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,9 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'society',
-    # 'channels',
-    # 'django_celery_beat',
-    # 'django_celery_results',
       
 ]
 AUTHENTICATION_BACKENDS=[
@@ -57,29 +58,21 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'django.middleware.cache.UpdateCacheMiddleware',
-    # 'django.middleware.cache.FetchFromCacheMiddleware',
-    # 'society.middleware.NoCacheMiddleware',
-    # 'society.cache_control_middleware.CacheControlMiddleware',  # Add this line
-
+    
 
 ]
 
-# myapp/middleware.py
 
 class ClearCookiesMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        # Process the request
         response = self.get_response(request)
 
-        # Check for logout request
-        if request.path == '/logout/':  # Adjust the path as needed
-            # Clear session cookies
-            response.delete_cookie('sessionid')  # Adjust cookie name if different
-            response.delete_cookie('csrftoken')   # CSRF cookie, if needed
+        if request.path == '/logout/':  
+            response.delete_cookie('sessionid')  
+            response.delete_cookie('csrftoken')   
 
         return response
 
@@ -100,7 +93,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'society.custom_context_processors.notifications'
             ],
         },
     },
@@ -110,8 +102,6 @@ WSGI_APPLICATION = 'pink_city.wsgi.application'
 ASGI_APPLICATION = 'pink_city.asgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -121,8 +111,6 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -140,8 +128,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -176,7 +162,7 @@ GOOGLE_DRIVE_CREDENTIALS = r"C:\Users\Sonali Jain Intern\Downloads\django-pink-c
 
 
 # Cookie settings
-SESSION_COOKIE_NAME = 'sessionid'  # Default session cookie name
+SESSION_COOKIE_NAME = 'sessionid'  
 SESSION_COOKIE_SECURE = False 
 SESSION_COOKIE_HTTPONLY = True 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True 
@@ -184,13 +170,5 @@ SESSION_COOKIE_AGE = 1209600
 CSRF_COOKIE_SECURE = False  
 CSRF_COOKIE_HTTPONLY = True  
 
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'jainsaloni498@gmail.com'
-EMAIL_HOST_PASSWORD = 'kaez ohka snfb bibe'  
-DEFAULT_FROM_EMAIL = 'jainsaloni498@gmail.com'
 
 

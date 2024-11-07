@@ -27,26 +27,16 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL') 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-%me0ak3f7w*#ce5tpz@t_@wl@2v857+6x46d-%e#v-4z!jekom'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
-
 INSTALLED_APPS = [
-    # 'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,9 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'society',
-    # 'channels',
-    # 'django_celery_beat',
-    # 'django_celery_results',
       
 ]
 AUTHENTICATION_BACKENDS=[
@@ -75,29 +62,22 @@ MIDDLEWARE = [
 
 ]
 
-# myapp/middleware.py
 
 class ClearCookiesMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        # Process the request
         response = self.get_response(request)
 
-        # Check for logout request
-        if request.path == '/logout/':  # Adjust the path as needed
-            # Clear session cookies
-            response.delete_cookie('sessionid')  # Adjust cookie name if different
-            response.delete_cookie('csrftoken')   # CSRF cookie, if needed
+        if request.path == '/logout/':  
+            response.delete_cookie('sessionid')  
+            response.delete_cookie('csrftoken')   
 
         return response
 
 
-
-
 ROOT_URLCONF = 'pink_city.urls'
-
 
 TEMPLATES = [
     {
@@ -110,7 +90,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'society.custom_context_processors.notifications'
             ],
         },
     },
@@ -120,8 +99,6 @@ WSGI_APPLICATION = 'pink_city.wsgi.application'
 ASGI_APPLICATION = 'pink_city.asgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -130,9 +107,6 @@ DATABASES = {
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -150,8 +124,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -162,13 +134,9 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -184,9 +152,7 @@ import os
 
 GOOGLE_DRIVE_CREDENTIALS = r"C:\Users\Sonali Jain Intern\Downloads\django-pink-city-cbf34294615f.json"
 
-
-# Cookie settings
-SESSION_COOKIE_NAME = 'sessionid'  # Default session cookie name
+SESSION_COOKIE_NAME = 'sessionid'  
 SESSION_COOKIE_SECURE = False 
 SESSION_COOKIE_HTTPONLY = True 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True 

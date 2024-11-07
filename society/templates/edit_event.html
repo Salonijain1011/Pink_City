@@ -17,7 +17,7 @@
    <input type="hidden" id="latitude-input" name="latitude">
 
     <label for="date">Date:</label>
-    <input type="date" id="id_date" name="date" required>
+    <input type="date" id="id_date" name="date" value="{{ event.date|date:"Y-m-d" }}" required>
 
     <label for="description">Description:</label>
     <textarea id="description" name="description" required>{{ event.description }}</textarea><br>
@@ -25,36 +25,41 @@
     <button type="submit">Save Changes</button>
 </form>
 
-    <script src="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.js"></script>
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.3/mapbox-gl-geocoder.min.js"></script>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.3/mapbox-gl-geocoder.css" type="text/css">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.3/mapbox-gl-geocoder.min.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css" rel="stylesheet">
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.3/mapbox-gl-geocoder.css" type="text/css">
 
-    <script>
-    const mapboxAccessToken = "{{ mapbox_access_token }}";
-    mapboxgl.accessToken = mapboxAccessToken;
-    const geocoder = new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        mapboxgl: mapboxgl,
-        placeholder: "Search for event location",
-        proximity: {
-            longitude: 76.6,
-            latitude: 27.02
-        }
-    });
+<script>
+const mapboxAccessToken = "{{ mapbox_access_token }}";
+mapboxgl.accessToken = mapboxAccessToken;
+const geocoder = new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl,
+    placeholder: "Search for event location",
+    proximity: {
+        longitude: 76.6,
+        latitude: 27.02
+    }
+});
 
-    geocoder.on('result', (e) => {
-        document.getElementById('location-input').value = e.result.place_name; 
-        document.getElementById('longitude-input').value = e.result.geometry.coordinates[0]; 
-        document.getElementById('latitude-input').value = e.result.geometry.coordinates[1];  
-    });
-    document.getElementById('geocoder').appendChild(geocoder.onAdd());
+geocoder.on('result', (e) => {
+    document.getElementById('location-input').value = e.result.place_name; 
+    document.getElementById('longitude-input').value = e.result.geometry.coordinates[0]; 
+    document.getElementById('latitude-input').value = e.result.geometry.coordinates[1];  
+});
+document.getElementById('geocoder').appendChild(geocoder.onAdd());
 
 const today = new Date().toISOString().split('T')[0];
 document.getElementById("id_date").setAttribute("min", today);
 </script>
 
 <style>
+
+    body, html {
+        overflow-x: hidden;
+    }
+    
     /* General body styling */
     body {
         font-family: Arial, sans-serif;
@@ -64,60 +69,96 @@ document.getElementById("id_date").setAttribute("min", today);
         padding-top: 5px; /* Adjust based on navbar height */
     }
 
-/* Form container styling */
-form {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 400px;
-    margin: 50px auto 0; /* Center the form horizontally */
-}
+    /* Form container styling */
+    form {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        margin: 50px auto 0; /* Center the form horizontally */
+    }
 
-/* Form label styling */
-label {
-display: block;
-font-size: 14px;
-font-weight: bold;
-margin-bottom: 6px;
-color: #333;
-}
+    /* Form label styling */
+    label {
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 6px;
+        color: #333;
+    }
 
-/* Input and textarea styling */
-input[type="text"],
-input[type="date"],
-textarea {
-width: 100%;
-padding: 8px;
-margin-bottom: 15px;
-border: 1px solid #ccc;
-border-radius: 4px;
-font-size: 14px;
-background-color: #f9f9f9;
-}
+    /* Input and textarea styling */
+    input[type="text"],
+    input[type="date"],
+    textarea {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        background-color: #f9f9f9;
+    }
 
-/* Textarea styling */
-textarea {
-height: 100px;
-resize: none;
-}
+    /* Textarea styling */
+    textarea {
+        height: 100px;
+        resize: none;
+    }
 
-/* Submit button styling */
-button {
-background-color:  #0d6efd;
-color: white;
-border: none;
-padding: 10px 20px;
-border-radius: 4px;
-font-size: 16px;
-cursor: pointer;
-transition: background-color 0.3s;
-}
+    /* Submit button styling */
+    button {
+        background-color:  #0d6efd;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
 
-/* Submit button hover effect */
-button:hover {
-background-color: #0b5ed7;
-}
+    /* Submit button hover effect */
+    button:hover {
+        background-color: #0b5ed7;
+    }
+
+    .mapboxgl-ctrl-geocoder {
+        font-size: 18px;
+        line-height: 24px;
+        font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, Helvetica, sans-serif;
+        position: relative;
+        background-color: #fff;
+        width: 70%;
+        min-width: 360px;
+        z-index: 1;
+        border-radius: 4px;
+        transition: width .25s, min-width .25s;
+    }
+
+    .mapboxgl-ctrl-geocoder--icon-search {
+        display: none;
+    }
+
+    .mapboxgl-ctrl-geocoder--icon-close {
+        display: none;
+    }
+
+    .mapboxgl-ctrl-geocoder--button {
+        visibility: hidden; /* This will hide the button but keep it in the DOM */
+        position: absolute; /* Removes it from the layout flow */
+        z-index: -1; /* Pushes it behind other elements */
+    }
+
+    .mapboxgl-ctrl-geocoder {
+        box-shadow: none !important; /* Removes the shadow */
+    }
+    
+    .mapboxgl-ctrl-geocoder .suggestions {
+        box-shadow: none !important; /* Ensures the suggestions dropdown has no shadow */
+    }
+    
 
 </style>
 {%endblock%}

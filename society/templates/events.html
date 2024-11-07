@@ -68,7 +68,7 @@
                                     <form method="post" action="{% url 'rsvp' event.id %}">
                                         {% csrf_token %}
                                         {{ form.as_p }}
-                                        <button type="submit">RSVP</button>
+                                        <button class="rsvp-button" type="submit">RSVP</button>
                                     </form>
                                 {% else %}
                                     <p>Please <a href="{% url 'login' %}">login</a> to RSVP.</p>
@@ -123,9 +123,6 @@
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css" rel="stylesheet">
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.3/mapbox-gl-geocoder.css" type="text/css">
 
-
-
-
     <script>
         
         const mapboxAccessToken = "{{ mapbox_access_token }}";
@@ -134,7 +131,7 @@
         const geocoder = new MapboxGeocoder({
             accessToken: mapboxgl.accessToken,
             mapboxgl: mapboxgl,
-            placeholder: "Search for event location",
+            placeholder: "",
             proximity: {
                 longitude: 76.6,
                 latitude: 27.02
@@ -168,7 +165,6 @@
             window.location.href = event.currentTarget.href;
         }
         
-
     </script>
 
     <script>
@@ -192,6 +188,10 @@
     </script>
     <style>
        
+        body, html {
+            overflow-x: hidden;
+          }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #FFFFFF;
@@ -203,8 +203,7 @@
             max-width: 1200px;
             margin: 20px auto;
             padding: 0 20px;
-        }
-        
+        }      
 
 .header {
     text-align: center;
@@ -213,7 +212,6 @@
     padding: 20px 0;
     margin-bottom: 20px;
 }
-
 
 p {
     margin: 5px 0;
@@ -264,7 +262,6 @@ p {
     color: #000000;
     margin-bottom: 20px;
 }
-
 
 .event-list {
     margin-bottom: 20px;
@@ -340,8 +337,6 @@ p {
     font-size: 1rem;
 }
 
-
-
 .event-form {
     margin-top: 20px;
     display: none; /* Can be shown when creating a new event */
@@ -372,7 +367,6 @@ p {
     background-color: #0b5ed7;
 }
 
-
 .event-board {
     background: white;
     border-radius: 5px;
@@ -385,6 +379,43 @@ p {
     color: #000000;
     margin-bottom: 20px;
 }
+
+.mapboxgl-ctrl-geocoder {
+    font-size: 18px;
+    line-height: 24px;
+    font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, Helvetica, sans-serif;
+    position: relative;
+    background-color: #fff;
+    width: 100%;
+    min-width: 1120px;
+    z-index: 1;
+    border-radius: 4px;
+    transition: width .25s, min-width .25s;
+  }
+
+.mapboxgl-ctrl-geocoder--icon-search {
+    display: none;
+  }
+
+  .mapboxgl-ctrl-geocoder--icon-close {
+    display: none;
+  }
+
+  .mapboxgl-ctrl-geocoder--button {
+    visibility: hidden; 
+    position: absolute; 
+    z-index: -1; 
+  }
+  
+  .mapboxgl-ctrl-geocoder {
+    box-shadow: none !important; 
+}
+
+.mapboxgl-ctrl-geocoder .suggestions {
+    box-shadow: none !important; 
+}
+
+
     </style>
 </body>
 {% endblock %}

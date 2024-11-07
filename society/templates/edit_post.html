@@ -12,8 +12,9 @@
     <label for="category">Category:</label>
     <input type="text" id="category" name="category" value="{{ post.category }}" required><br>
 
+
     <label for="date">Date:</label>
-    <input type="date" id="id_date" name="date" required>
+    <input type="date" id="id_date" name="date" value="{{ post.date|date:"Y-m-d" }}" required>
 
     <label for="description">Description:</label>
     <textarea id="description" name="description" required>{{ post.description }}</textarea><br>
@@ -27,6 +28,11 @@
 </script>
 
 <style>
+
+    body, html {
+        overflow-x: hidden;
+      }
+
 /* General body styling */
 body {
     font-family: Arial, sans-serif;

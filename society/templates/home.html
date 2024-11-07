@@ -13,6 +13,11 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.js"></script>
     <title>{% block title %}Pink city Community Hub{% endblock %}</title>
     <style>
+
+      body, html {
+        overflow-x: hidden;
+      }
+
       /* Send Notification Button Style */
       form button[type="submit"] {
         width: 100%;
@@ -58,8 +63,6 @@
         10%, 90% {opacity: 1;}
         100% {opacity: 0;}
       }
-      {% comment %} body { margin: 0; padding: 0; }
-      #map { position: absolute; top: 0; bottom: 0; width: 100%; } {% endcomment %}
 
       </style>
        

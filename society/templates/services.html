@@ -305,6 +305,46 @@
             <a href="{% url 'services' %}" class="cancel-btn">Cancel</a>
        </form>
 
+       <button class="create-service-button">Create New Service</button>
+
+       <div id="service-form"  style="display: none;">
+           <h3>Offer or Request a Service</h3>
+           <form method="POST" action="{% url 'post_service' %}">
+               {% csrf_token %}
+               <div class="form-group">
+                   {{ n }}
+                   <label for="service_type">Service Type:</label>
+                   <select name="service_type" id="service_type" required>
+                       <option value="offering">Offering</option>
+                       <option value="requesting">Requesting</option>
+                   </select>
+               </div>
+
+               <div class="form-group">
+                   <label for="service_category">Category:</label>
+                   <select name="service_category" id="service_category" required>
+                       <option value="Babysitting">Babysitting</option>
+                       <option value="Gardening">Gardening</option>
+                       <option value="Pet_sitting">Pet Sitting</option>
+                       <option value="Cleaning">Cleaning</option>
+                       <option value="Other">Other</option>
+                   </select>
+               </div>
+
+               <div class="form-group">
+                   <label for="description">Service Description:</label>
+                   <textarea name="description" id="description" rows="4" placeholder="Describe the service in detail" required></textarea>
+               </div>
+
+               <div class="form-group">
+                   <label for="price">Price (optional):</label>
+                   <input type="text" name="price" id="price" placeholder="Enter price, if applicable">
+               </div>
+
+               <button type="submit">Create Service</button>
+            </form>
+       </div>
+
         <div class="discussion-board">
         <h2>Categories</h2>
         <div class="categories"> 
@@ -372,45 +412,6 @@
             </ul>
         </nav>
         
-        <button class="create-service-button">Create New Service</button>
-
-        <div id="service-form"  style="display: none;">
-            <h3>Offer or Request a Service</h3>
-            <form method="POST" action="{% url 'post_service' %}">
-                {% csrf_token %}
-                <div class="form-group">
-                    {{ n }}
-                    <label for="service_type">Service Type:</label>
-                    <select name="service_type" id="service_type" required>
-                        <option value="offering">Offering</option>
-                        <option value="requesting">Requesting</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="service_category">Category:</label>
-                    <select name="service_category" id="service_category" required>
-                        <option value="Babysitting">Babysitting</option>
-                        <option value="Gardening">Gardening</option>
-                        <option value="Pet_sitting">Pet Sitting</option>
-                        <option value="Cleaning">Cleaning</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="description">Service Description:</label>
-                    <textarea name="description" id="description" rows="4" placeholder="Describe the service in detail" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="price">Price (optional):</label>
-                    <input type="text" name="price" id="price" placeholder="Enter price, if applicable">
-                </div>
-
-                <button type="submit">Submit</button>
-            </form>
-        </div>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {

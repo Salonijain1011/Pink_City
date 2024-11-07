@@ -8,9 +8,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
    path('dashboard/', views.user_dashboard, name='user_dashboard'),
-    path('upload/', views.upload, name='upload'),
+   path('upload/', views.upload, name='upload'),
    path('files/', views.file_list, name='file_list'),
-
 
     path("auth/login/", LoginView.as_view(template_name="LoginPage.html"), name="login-user"),
     path("auth/logout/", LogoutView.as_view(), name="logout-user"),

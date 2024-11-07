@@ -11,7 +11,10 @@
     
 
     <label for="location">Location:</label>
-    <input type="text" id="location" name="location" value="{{ event.location }}" required><br>
+   <div id="geocoder" class="geocoder"></div>
+   <input type="hidden" id="location-input" name="location" required>
+   <input type="hidden" id="longitude-input" name="longitude">
+   <input type="hidden" id="latitude-input" name="latitude">
 
     <label for="date">Date:</label>
     <input type="date" id="id_date" name="date" required>
@@ -22,7 +25,31 @@
     <button type="submit">Save Changes</button>
 </form>
 
-<script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.3/mapbox-gl-geocoder.min.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.3/mapbox-gl-geocoder.css" type="text/css">
+
+    <script>
+    const mapboxAccessToken = "{{ mapbox_access_token }}";
+    mapboxgl.accessToken = mapboxAccessToken;
+    const geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl,
+        placeholder: "Search for event location",
+        proximity: {
+            longitude: 76.6,
+            latitude: 27.02
+        }
+    });
+
+    geocoder.on('result', (e) => {
+        document.getElementById('location-input').value = e.result.place_name; 
+        document.getElementById('longitude-input').value = e.result.geometry.coordinates[0]; 
+        document.getElementById('latitude-input').value = e.result.geometry.coordinates[1];  
+    });
+    document.getElementById('geocoder').appendChild(geocoder.onAdd());
+
 const today = new Date().toISOString().split('T')[0];
 document.getElementById("id_date").setAttribute("min", today);
 </script>

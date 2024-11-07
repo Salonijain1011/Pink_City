@@ -9,6 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}" >
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.js"></script>
     <title>{% block title %}Pink city Community Hub{% endblock %}</title>
     <style>
       /* Send Notification Button Style */
@@ -56,6 +58,9 @@
         10%, 90% {opacity: 1;}
         100% {opacity: 0;}
       }
+      {% comment %} body { margin: 0; padding: 0; }
+      #map { position: absolute; top: 0; bottom: 0; width: 100%; } {% endcomment %}
+
       </style>
        
   </head>
@@ -296,40 +301,76 @@
         </div>
       </section>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-          var snackbar = document.getElementById("snackbar");
-          
-          {% if latest_notification %}
-          var notificationId = "{{ latest_notification.id }}";  
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var snackbar = document.getElementById("snackbar");
+            
+            {% if latest_notification %}
+            var notificationId = "{{ latest_notification.id }}";  
+      
+            var shownNotificationId = localStorage.getItem("shownNotificationId");
+      
+            if (shownNotificationId !== notificationId) {
+              snackbar.classList.add("show");
+      
+              setTimeout(function() {
+                snackbar.classList.remove("show");
+              }, 3000);
+      
+              localStorage.setItem("shownNotificationId", notificationId);
+            }
+            {% endif %}
+      
+            if (localStorage.getItem('scrollToBottom') === 'true') {
+                window.scrollTo(0, document.body.scrollHeight);
+                localStorage.removeItem('scrollToBottom');
+            }
+        });
+      </script>
+      
+<div id="map" style="height: 400px; width: 100%;"></div>
+<script>
   
-          var shownNotificationId = localStorage.getItem("shownNotificationId");
-  
-          if (shownNotificationId !== notificationId) {
-            snackbar.classList.add("show");
-  
-            setTimeout(function() {
-              snackbar.classList.remove("show");
-            }, 3000);
-  
-            localStorage.setItem("shownNotificationId", notificationId);
-          }
-          {% endif %}
-      });
-  </script>
+  const mapboxAccessToken = "{{ mapbox_access_token }}";
+  mapboxgl.accessToken = mapboxAccessToken;
+  const savedLocation = localStorage.getItem('selectedLocation');
+  let centerCoordinates, zoomLevel;
+
+  if (savedLocation) {
+      const locationData = JSON.parse(savedLocation);
+      centerCoordinates = [locationData.longitude, locationData.latitude];
+      zoomLevel = 12; 
+  } else {
+      centerCoordinates = [75.907974, 27.004079];
+      zoomLevel = 9;
+  }
+
+  const map = new mapboxgl.Map({
+      container: 'map',
+      center: centerCoordinates,
+      zoom: zoomLevel
+  });
+
+  if (savedLocation) {
+
+    new mapboxgl.Marker().setLngLat(centerCoordinates).addTo(map);
      
-      <p>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d56917.58761112046!2d75.74902751047665!3d26.92414118489805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db14c8361a269%3A0xeb69cb5761c91444!2sPink%20City%2C%20Jaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1728444504766!5m2!1sen!2sin" width="1400" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </p>
-           
-    <!-- Footer -->
+  }
+</script>
+
+<script>
+  window.addEventListener("beforeunload", function () {
+      localStorage.removeItem('selectedLocation');
+  });
+</script>
+
+          
     <footer class="footer bg-dark text-light text-center py-3">
         <p>&copy; 2024 Pink_City Community Hub. All Rights Reserved.</p>
         <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
         <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
         <a href="#" class="text-light"><i class="bi bi-instagram"></i></a>
     </footer>
-      
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

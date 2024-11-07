@@ -27,13 +27,15 @@ from django.conf import settings
 from .models import DriveFile
 import threading
 
+
 @never_cache
 @login_required(login_url='/login/')
 def home(request):
     latest_notification = Notification.objects.order_by('-created_at').first()
 
     return render(request, 'home.html', {
-        'latest_notification': latest_notification,
+        'latest_notification': latest_notification,'mapbox_access_token': settings.MAPBOX_ACCESS_TOKEN  # Add API key to context
+
     })
 
 @check_session

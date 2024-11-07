@@ -9,7 +9,7 @@ from society.forms import RSVPForm
 from society.Controller.Checker import check_session
 from django.utils import timezone
 from django.contrib import messages
-
+from django.conf import settings
 
 @check_session
 def events(request):
@@ -33,7 +33,9 @@ def events(request):
         'page_obj': page_obj,  
         'paginator': paginator,
         'page_number': page_number,
-        'search_query': search_query 
+        'search_query': search_query,
+        'mapbox_access_token': settings.MAPBOX_ACCESS_TOKEN  # Add API key to context
+ 
 } 
     response = render(request, 'events.html', context)
     response['Cache-Control'] = 'no-store'
@@ -59,7 +61,8 @@ def edit_event(request, event_id):
         event.description = request.POST.get('description')
         event.save()
         return redirect('events')  
-    context = {'event': event}
+    
+    context = {'event': event,'mapbox_access_token': settings.MAPBOX_ACCESS_TOKEN  }
     response = render(request, 'edit_event.html', context)
     response['Cache-Control'] = 'no-store'
     response['Pragma'] = 'no-cache'
@@ -95,6 +98,8 @@ def create_event(request):
         title = request.POST.get('title')
         date = request.POST.get('date')
         location = request.POST.get('location')
+        longitude = request.POST.get("longitude")
+        latitude = request.POST.get("latitude")
         description = request.POST.get('description')
 
         if date and date < timezone.now().date().isoformat():
@@ -105,13 +110,17 @@ def create_event(request):
             title=title,
             date=date,
             location=location,
+            longitude=longitude,
+            latitude=latitude,
             description=description,
             user=request.user  
         )
         messages.success(request, 'Event created successfully!')
         return redirect('events')  
     else:
-        return render(request, 'event.html', {'today': timezone.now().date()})
+        return render(request, 'event.html', {
+    'today': timezone.now().date(),
+})
 
 
 @check_session

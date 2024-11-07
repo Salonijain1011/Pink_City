@@ -11,8 +11,8 @@ class ServicesAdmin(admin.ModelAdmin):
 admin.site.register(Services, ServicesAdmin)
 
 class EventAdmin(admin.ModelAdmin):
-    list_display=('title', 'user','date','location','description')
-    search_fields=('title','user__username','location','description')
+    list_display=('title', 'user','date','location','longitude','latitude','description')
+    search_fields=('title','user__username','location','longitude','latitude','description')
 admin.site.register(Event,EventAdmin)
 
 class ForumAdmin(admin.ModelAdmin):

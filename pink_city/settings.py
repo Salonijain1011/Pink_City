@@ -12,6 +12,20 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # Loads environment variables from the .env file
+
+MAPBOX_ACCESS_TOKEN = os.getenv('MAPBOX_ACCESS_TOKEN')
+
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL') 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -57,10 +71,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'django.middleware.cache.UpdateCacheMiddleware',
-    # 'django.middleware.cache.FetchFromCacheMiddleware',
-    # 'society.middleware.NoCacheMiddleware',
-    # 'society.cache_control_middleware.CacheControlMiddleware',  # Add this line
 
 
 ]
@@ -183,14 +193,5 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 1209600  
 CSRF_COOKIE_SECURE = False  
 CSRF_COOKIE_HTTPONLY = True  
-
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'jainsaloni498@gmail.com'
-EMAIL_HOST_PASSWORD = 'kaez ohka snfb bibe'  
-DEFAULT_FROM_EMAIL = 'jainsaloni498@gmail.com'
 
 

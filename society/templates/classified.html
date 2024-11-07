@@ -181,11 +181,23 @@
 
          </form>
 
+         <button class="create-ad-button">Create New Ad</button>
+
+         <div class="ad-form"  style="display: none;">
+             <h3>Post New Ad</h3>
+             <form method="POST" action="{% url 'create_ad' %}"  >
+                 {% csrf_token %}
+                 <input type="text" name="title" placeholder="Ad Title" required>
+                 <input type="text" name="price" placeholder="Price (or Trade)" required>
+                 <textarea name="description" rows="4" placeholder="Ad Description" required></textarea>
+                 <button type="submit">Create Ad</button>
+             </form>
+         </div>
+
         <div class="ads-board">
             <h2>Buy, Sell, or Trade</h2> 
 
-
-            <div class="ad-list">
+            <div>
                 
                 {% for ad in page_obj %}
                 <div class="ad">
@@ -239,19 +251,7 @@
                         {% endif %}
                     </ul>
                 </nav>
-                <button class="create-ad-button">Create New Ad</button>
-
-            <div class="ad-form"  style="display: none;">
-                <h3>Post New Ad</h3>
-                <form method="POST" action="{% url 'create_ad' %}"  >
-                    {% csrf_token %}
-                    <input type="text" name="title" placeholder="Ad Title" required>
-                    <input type="text" name="price" placeholder="Price (or Trade)" required>
-                    <textarea name="description" rows="4" placeholder="Ad Description" required></textarea>
-                    <button type="submit">Post Ad</button>
-                </form>
-            </div>
-
+              
         </div>
 
         <script>

@@ -29,7 +29,9 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-%me0ak3f7w*#ce5tpz@t_@wl@2v857+6x46d-%e#v-4z!jekom'
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+GOOGLE_DRIVE_CREDENTIALS = os.getenv('GOOGLE_DRIVE_CREDENTIALS')
 
 DEBUG = True
 
@@ -156,9 +158,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static'),
 # ]
-import os
 
-GOOGLE_DRIVE_CREDENTIALS = r"C:\Users\Sonali Jain Intern\Downloads\django-pink-city-77d08d4de61f.json"
+
 
 
 # Cookie settings
